@@ -1,0 +1,6 @@
+﻿/.vs
+/src/.vs
+/src/packages
+/src/*/.vs
+/src/*/bin
+/src/*/obj

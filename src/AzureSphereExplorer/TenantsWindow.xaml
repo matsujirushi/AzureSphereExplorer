@@ -1,0 +1,24 @@
+﻿<Window x:Class="AzureSphereExplorer.TenantsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AzureSphereExplorer"
+        mc:Ignorable="d"
+        Title="TenantsWindow" Height="325.079" Width="423.817" Loaded="Window_Loaded" WindowStartupLocation="CenterOwner" ShowInTaskbar="False">
+    <Grid>
+        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="120"/>
+        </Grid.ColumnDefinitions>
+        
+        <DataGrid x:Name="gridTenants" IsReadOnly="True" SelectionMode="Single"/>
+
+        <StackPanel Grid.Column="1" Orientation="Vertical">
+            <Button Width="100" Height="30" Margin="5" Content="OK" Click="OK_Click" IsDefault="True"/>
+            <Button Width="100" Height="30" Margin="5" Content="Cancel" Click="Cancel_Click" IsCancel="True"/>
+        </StackPanel>
+        
+    </Grid>
+</Window>
