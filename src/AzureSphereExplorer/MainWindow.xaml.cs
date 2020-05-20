@@ -61,9 +61,18 @@ namespace AzureSphereExplorer
             var deviceGroups = await tenant.GetDeviceGroupsAsync(cancellationTokenSource.Token);
             var devices = await tenant.GetDevicesAsync(cancellationTokenSource.Token);
 
-            this.gridProducts.ItemsSource = products;
-            this.gridDeviceGroups.ItemsSource = deviceGroups;
+            this.gridProducts.ItemsSource = from v in products
+                                            select new { v.Name, v.Description };
+
+            this.gridDeviceGroups.ItemsSource = from v in deviceGroups
+                                                join p in products on v.ProductId equals p.Id
+                                                select new { v.Name, v.Description, v.OsFeedTypeStr, v.UpdatePolicyStr, ProductName = p.Name };
+
             this.gridDevices.ItemsSource = devices;
+
+            //this.gridDevices.ItemsSource = from v in devices
+            //                               join dg in deviceGroups on v.DeviceGroupId equals dg.Id
+            //                               select new { v.Id, dg.Name };
         }
 
     }

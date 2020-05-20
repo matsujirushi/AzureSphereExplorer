@@ -19,6 +19,42 @@ namespace AzureSpherePublicAPI
         public string ProductId { get; private set; }
         public int UpdatePolicy { get; private set; }
 
+        public string OsFeedTypeStr
+        {
+            get
+            {
+                switch (OsFeedType)
+                {
+                    case 0:
+                        return "Retail";
+                    case 1:
+                        return "RetailEval";
+                    default:
+                        return "?";
+                }
+            }
+        }
+
+        public string UpdatePolicyStr
+        {
+            get
+            {
+                switch (UpdatePolicy)
+                {
+                    case 0:
+                        return "No3rdParty";
+                    case 1:
+                        return "AppUpdates";
+                    case 2:
+                        return "NoUpdates";
+                    case 3:
+                        return "UpdateAll";
+                    default:
+                        return "?";
+                }
+            }
+        }
+
         internal AzureSphereDeviceGroup(AzureSphereTenant tenant, JToken json)
         {
             Tenant = tenant;
