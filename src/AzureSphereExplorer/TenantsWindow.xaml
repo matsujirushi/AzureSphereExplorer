@@ -13,7 +13,7 @@
         TextOptions.TextRenderingMode="Auto"        
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
-        Title="TenantsWindow" Height="325.079" Width="423.817" Loaded="Window_Loaded" WindowStartupLocation="CenterOwner" ShowInTaskbar="False">
+        Title="TenantsWindow" Height="400" Width="600" Loaded="Window_Loaded" WindowStartupLocation="CenterOwner" ShowInTaskbar="False">
     <Grid>
         
         <Grid.ColumnDefinitions>
