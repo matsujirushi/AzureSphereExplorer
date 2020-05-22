@@ -15,8 +15,8 @@ namespace AzureSpherePublicAPI
         internal List<AzureSphereProduct> Products { get; private set; } = null;
         internal List<AzureSphereDeviceGroup> DeviceGroups { get; private set; } = null;
 
-        public string Id { get; private set; }
         public string Name { get; private set; }
+        public string Id { get; private set; }
 
         internal AzureSphereTenant(AzureSphereAPI api, JToken json)
         {
