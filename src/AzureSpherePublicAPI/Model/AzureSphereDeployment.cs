@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace AzureSpherePublicAPI
 {
-    public class AzureSphereDeploymentModel
+    public class AzureSphereDeployment
     {
         public string Id { get; private set; }
         public string DeploymentDateUtc { get; private set; }
         public List<string> DeployedImages { get; private set; }
 
-        internal AzureSphereDeploymentModel(JToken json)
+        internal AzureSphereDeployment(JToken json)
         {
             Id = json.Value<string>("Id");
             DeploymentDateUtc = json.Value<string>("DeploymentDateUtc");

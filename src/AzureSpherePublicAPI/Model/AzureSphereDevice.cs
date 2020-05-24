@@ -7,10 +7,8 @@ using System.Threading.Tasks;
 
 namespace AzureSpherePublicAPI
 {
-    public class AzureSphereDeviceModel
+    public class AzureSphereDevice
     {
-        private AzureSphereTenant Tenant;
-
         public string Id { get; private set; }
         public string DeviceGroupId { get; private set; }
         public int ChipSku { get; private set; }
@@ -29,10 +27,8 @@ namespace AzureSpherePublicAPI
             }
         }
 
-        internal AzureSphereDeviceModel(AzureSphereTenant tenant, JToken json)
+        internal AzureSphereDevice(JToken json)
         {
-            Tenant = tenant;
-
             Id = json.Value<string>("DeviceId");
             DeviceGroupId = json.Value<string>("DeviceGroupId");
             ChipSku = json.Value<int>("ChipSku");

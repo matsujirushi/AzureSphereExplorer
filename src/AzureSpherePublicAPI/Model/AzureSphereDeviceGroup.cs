@@ -10,15 +10,13 @@ namespace AzureSpherePublicAPI
 {
     public class AzureSphereDeviceGroup
     {
-        private AzureSphereTenant Tenant;
-
         public string Id { get; private set; }
         public string Name { get; private set; }
         public string Description { get; private set; }
         public int OsFeedType { get; private set; }
         public string ProductId { get; private set; }
         public int UpdatePolicy { get; private set; }
-        public AzureSphereDeploymentModel CurrentDeployment { get; private set; }
+        public AzureSphereDeployment CurrentDeployment { get; private set; }
 
         public string OsFeedTypeStr
         {
@@ -56,17 +54,15 @@ namespace AzureSpherePublicAPI
             }
         }
 
-        internal AzureSphereDeviceGroup(AzureSphereTenant tenant, JToken json)
+        internal AzureSphereDeviceGroup(JToken json)
         {
-            Tenant = tenant;
-
             Id = json.Value<string>("Id");
             Name = json.Value<string>("Name");
             Description = json.Value<string>("Description");
             OsFeedType = json.Value<int>("OsFeedType");
             ProductId = json.Value<string>("ProductId");
             UpdatePolicy = json.Value<int>("UpdatePolicy");
-            CurrentDeployment = json["CurrentDeployment"].HasValues ? new AzureSphereDeploymentModel(json["CurrentDeployment"]) : null;
+            CurrentDeployment = json["CurrentDeployment"].HasValues ? new AzureSphereDeployment(json["CurrentDeployment"]) : null;
         }
 
     }

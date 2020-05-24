@@ -12,7 +12,7 @@ namespace AzureSpherePublicAPI
     public class AzureSphereTenant
     {
         private AzureSphereAPI Api;
-        internal List<AzureSphereProduct> Products { get; private set; } = null;
+        internal List<AzureSphereProductModel> Products { get; private set; } = null;
         internal List<AzureSphereDeviceGroup> DeviceGroups { get; private set; } = null;
 
         public string Name { get; private set; }
@@ -31,7 +31,7 @@ namespace AzureSpherePublicAPI
             return await Api.GetAsync($"v2/tenants/{Id}/{relativeUrl}", cancellationToken);
         }
 
-        public async Task<List<AzureSphereDeviceModel>> GetDevicesAsync(CancellationToken cancellationToken)
+        public async Task<List<AzureSphereDevice>> GetDevicesAsync(CancellationToken cancellationToken)
         {
             var jsonString = await GetAsync("devices", cancellationToken);
             Console.WriteLine("GetDevicesAsync()");
@@ -39,16 +39,16 @@ namespace AzureSpherePublicAPI
             var json = JToken.Parse(jsonString);
             var jsonDevices = json.Value<JArray>("Items");
 
-            var devices = new List<AzureSphereDeviceModel>();
+            var devices = new List<AzureSphereDevice>();
             foreach (var jsonDevice in jsonDevices)
             {
-                devices.Add(new AzureSphereDeviceModel(this, jsonDevice));
+                devices.Add(new AzureSphereDevice(jsonDevice));
             }
 
             return devices;
         }
 
-        public async Task<List<AzureSphereProduct>> GetProductsAsync(CancellationToken cancellationToken)
+        public async Task<List<AzureSphereProductModel>> GetProductsAsync(CancellationToken cancellationToken)
         {
             var jsonString = await GetAsync("products", cancellationToken);
             Console.WriteLine("GetProductsAsync()");
@@ -56,10 +56,10 @@ namespace AzureSpherePublicAPI
             var json = JToken.Parse(jsonString);
             var jsonProducts = json.Value<JArray>("Items");
 
-            var products = new List<AzureSphereProduct>();
+            var products = new List<AzureSphereProductModel>();
             foreach (var jsonProduct in jsonProducts)
             {
-                products.Add(new AzureSphereProduct(this, jsonProduct));
+                products.Add(new AzureSphereProductModel(jsonProduct));
             }
 
             Products = products;
@@ -78,7 +78,7 @@ namespace AzureSpherePublicAPI
             var deviceGroups = new List<AzureSphereDeviceGroup>();
             foreach (var jsonDeviceGroup in jsonDeviceGroups)
             {
-                deviceGroups.Add(new AzureSphereDeviceGroup(this, jsonDeviceGroup));
+                deviceGroups.Add(new AzureSphereDeviceGroup(jsonDeviceGroup));
             }
 
             DeviceGroups = deviceGroups;
