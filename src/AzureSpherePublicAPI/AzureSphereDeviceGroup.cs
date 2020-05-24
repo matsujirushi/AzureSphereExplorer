@@ -67,22 +67,5 @@ namespace AzureSpherePublicAPI
             UpdatePolicy = json.Value<int>("UpdatePolicy");
         }
 
-        public async Task<List<AzureSphereDeployment>> GetDeploymentsAsync(CancellationToken cancellationToken)
-        {
-            var jsonString = await Tenant.GetAsync($"devicegroups/{Id}/deployments", cancellationToken);
-            Console.WriteLine("GetDeploymentsAsync()");
-            Console.WriteLine(jsonString);
-            var json = JToken.Parse(jsonString);
-            var jsonDeployments = json.Value<JArray>("Items");
-
-            var deployments = new List<AzureSphereDeployment>();
-            foreach (var jsonDeployment in jsonDeployments)
-            {
-                deployments.Add(new AzureSphereDeployment(Tenant, jsonDeployment));
-            }
-
-            return deployments;
-        }
-
     }
 }
