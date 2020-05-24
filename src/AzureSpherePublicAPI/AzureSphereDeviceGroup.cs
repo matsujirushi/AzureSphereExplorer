@@ -18,6 +18,7 @@ namespace AzureSpherePublicAPI
         public int OsFeedType { get; private set; }
         public string ProductId { get; private set; }
         public int UpdatePolicy { get; private set; }
+        public AzureSphereDeploymentModel CurrentDeployment { get; private set; }
 
         public string OsFeedTypeStr
         {
@@ -65,6 +66,7 @@ namespace AzureSpherePublicAPI
             OsFeedType = json.Value<int>("OsFeedType");
             ProductId = json.Value<string>("ProductId");
             UpdatePolicy = json.Value<int>("UpdatePolicy");
+            CurrentDeployment = json["CurrentDeployment"].HasValues ? new AzureSphereDeploymentModel(json["CurrentDeployment"]) : null;
         }
 
     }
