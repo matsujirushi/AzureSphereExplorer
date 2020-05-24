@@ -73,7 +73,7 @@ namespace AzureSphereExplorer
                                            from dg_ in gj.DefaultIfEmpty()
                                            join p in products on dg_?.ProductId equals p.Id into gj2
                                            from p_ in gj2.DefaultIfEmpty()
-                                           select new { Product = p_?.Name, DeviceGroup = dg_?.Name, DeviceId = v.Id };
+                                           select new { Product = p_?.Name, DeviceGroup = dg_?.Name, ChipSku = v.ChipSkuStr, DeviceId = v.Id };
         }
 
     }

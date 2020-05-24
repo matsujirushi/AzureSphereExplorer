@@ -31,7 +31,7 @@ namespace AzureSpherePublicAPI
             return await Api.GetAsync($"v2/tenants/{Id}/{relativeUrl}", cancellationToken);
         }
 
-        public async Task<List<AzureSphereDevice>> GetDevicesAsync(CancellationToken cancellationToken)
+        public async Task<List<AzureSphereDeviceModel>> GetDevicesAsync(CancellationToken cancellationToken)
         {
             var jsonString = await GetAsync("devices", cancellationToken);
             Console.WriteLine("GetDevicesAsync()");
@@ -39,10 +39,10 @@ namespace AzureSpherePublicAPI
             var json = JToken.Parse(jsonString);
             var jsonDevices = json.Value<JArray>("Items");
 
-            var devices = new List<AzureSphereDevice>();
+            var devices = new List<AzureSphereDeviceModel>();
             foreach (var jsonDevice in jsonDevices)
             {
-                devices.Add(new AzureSphereDevice(this, jsonDevice));
+                devices.Add(new AzureSphereDeviceModel(this, jsonDevice));
             }
 
             return devices;

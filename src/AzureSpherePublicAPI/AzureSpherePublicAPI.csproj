@@ -52,7 +52,7 @@
   <ItemGroup>
     <Compile Include="AzureSphereAPI.cs" />
     <Compile Include="Model\AzureSphereDeploymentModel.cs" />
-    <Compile Include="AzureSphereDevice.cs" />
+    <Compile Include="Model\AzureSphereDeviceModel.cs" />
     <Compile Include="AzureSphereDeviceGroup.cs" />
     <Compile Include="AzureSphereProduct.cs" />
     <Compile Include="AzureSphereTenant.cs" />
