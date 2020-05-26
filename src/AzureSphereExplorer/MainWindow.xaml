@@ -14,6 +14,11 @@
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
         Title="Azure Sphere Explorer" Height="600" Width="1024" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <ContextMenu x:Key="menuDeviceGroup">
+            <MenuItem Header="Deployments..." Click="menuitemDeviceGroupDeployments_Click"/>
+        </ContextMenu>
+    </Window.Resources>
     <Grid>
 
         <Grid.ColumnDefinitions>
@@ -38,7 +43,7 @@
                 <TextBlock Style="{DynamicResource MaterialDesignCaptionTextBlock}" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}" Background="{DynamicResource PrimaryHueLightBrush}">
                     Products
                 </TextBlock>
-                <DataGrid Grid.Row="1" x:Name="gridProducts" IsReadOnly="True"/>
+                <DataGrid Grid.Row="1" x:Name="gridProducts" IsReadOnly="True" SelectionMode="Single"/>
             </Grid>
             
             <GridSplitter Grid.Row="1" Height="5" HorizontalAlignment="Stretch"/>
@@ -51,7 +56,7 @@
                 <TextBlock Style="{DynamicResource MaterialDesignCaptionTextBlock}" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}" Background="{DynamicResource PrimaryHueLightBrush}">
                     Device Groups
                 </TextBlock>
-                <DataGrid Grid.Row="1" x:Name="gridDeviceGroups" IsReadOnly="True"/>
+                <DataGrid Grid.Row="1" x:Name="gridDeviceGroups" IsReadOnly="True" SelectionMode="Single" ContextMenu="{DynamicResource menuDeviceGroup}"/>
             </Grid>
             
         </Grid>
@@ -66,7 +71,7 @@
             <TextBlock Style="{DynamicResource MaterialDesignCaptionTextBlock}" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}" Background="{DynamicResource PrimaryHueLightBrush}">
                 Devices
             </TextBlock>
-            <DataGrid Grid.Row="1" x:Name="gridDevices" IsReadOnly="True"/>
+            <DataGrid Grid.Row="1" x:Name="gridDevices" IsReadOnly="True" SelectionMode="Single"/>
         </Grid>
 
     </Grid>

@@ -102,6 +102,23 @@ namespace AzureSpherePublicAPI
             return devices;
         }
 
+        public async Task<List<AzureSphereDeployment>> GetDeploymentsAsync(AzureSphereTenant tenant, AzureSphereDeviceGroup deviceGroup, CancellationToken cancellationToken)
+        {
+            var jsonString = await GetAsync($"v2/tenants/{tenant.Id}/devicegroups/{deviceGroup.Id}/deployments", cancellationToken);
+            Console.WriteLine("GetDeploymentsAsync()");
+            Console.WriteLine(jsonString);
+            var json = JToken.Parse(jsonString);
+            var jsonDeployments = json.Value<JArray>("Items");
+
+            var deployments = new List<AzureSphereDeployment>();
+            foreach (var jsonDeployment in jsonDeployments)
+            {
+                deployments.Add(new AzureSphereDeployment(jsonDeployment));
+            }
+
+            return deployments;
+        }
+
         internal async Task<string> GetAsync(string relativeUrl, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(AccessToken)) throw new ApplicationException();

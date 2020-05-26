@@ -92,5 +92,9 @@ namespace AzureSphereExplorer
                                            };
         }
 
+        private void menuitemDeviceGroupDeployments_Click(object sender, RoutedEventArgs e)
+        {
+            //var deviceGroup = gridDeviceGroups.SelectedItem as AzureSphereDeviceGroup;
+        }
     }
 }
