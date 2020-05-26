@@ -45,10 +45,61 @@ namespace AzureSpherePublicAPI
             var tenants = new List<AzureSphereTenant>();
             foreach (var jsonTenant in jsonTenants)
             {
-                tenants.Add(new AzureSphereTenant(this, jsonTenant));
+                tenants.Add(new AzureSphereTenant(jsonTenant));
             }
 
             return tenants;
+        }
+
+        public async Task<List<AzureSphereProduct>> GetProductsAsync(AzureSphereTenant tenant, CancellationToken cancellationToken)
+        {
+            var jsonString = await GetAsync($"v2/tenants/{tenant.Id}/products", cancellationToken);
+            Console.WriteLine("GetProductsAsync()");
+            Console.WriteLine(jsonString);
+            var json = JToken.Parse(jsonString);
+            var jsonProducts = json.Value<JArray>("Items");
+
+            var products = new List<AzureSphereProduct>();
+            foreach (var jsonProduct in jsonProducts)
+            {
+                products.Add(new AzureSphereProduct(jsonProduct));
+            }
+
+            return products;
+        }
+
+        public async Task<List<AzureSphereDeviceGroup>> GetDeviceGroupsAsync(AzureSphereTenant tenant, CancellationToken cancellationToken)
+        {
+            var jsonString = await GetAsync($"v2/tenants/{tenant.Id}/devicegroups", cancellationToken);
+            Console.WriteLine("GetDeviceGroupsAsync()");
+            Console.WriteLine(jsonString);
+            var json = JToken.Parse(jsonString);
+            var jsonDeviceGroups = json.Value<JArray>("Items");
+
+            var deviceGroups = new List<AzureSphereDeviceGroup>();
+            foreach (var jsonDeviceGroup in jsonDeviceGroups)
+            {
+                deviceGroups.Add(new AzureSphereDeviceGroup(jsonDeviceGroup));
+            }
+
+            return deviceGroups;
+        }
+
+        public async Task<List<AzureSphereDevice>> GetDevicesAsync(AzureSphereTenant tenant, CancellationToken cancellationToken)
+        {
+            var jsonString = await GetAsync($"v2/tenants/{tenant.Id}/devices", cancellationToken);
+            Console.WriteLine("GetDevicesAsync()");
+            Console.WriteLine(jsonString);
+            var json = JToken.Parse(jsonString);
+            var jsonDevices = json.Value<JArray>("Items");
+
+            var devices = new List<AzureSphereDevice>();
+            foreach (var jsonDevice in jsonDevices)
+            {
+                devices.Add(new AzureSphereDevice(jsonDevice));
+            }
+
+            return devices;
         }
 
         internal async Task<string> GetAsync(string relativeUrl, CancellationToken cancellationToken)

@@ -21,6 +21,8 @@ namespace AzureSphereExplorer
     /// </summary>
     public partial class MainWindow : Window
     {
+        private AzureSphereAPI _Api = new AzureSphereAPI();
+
         public MainWindow()
         {
             InitializeComponent();
@@ -30,10 +32,9 @@ namespace AzureSphereExplorer
         {
             CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
-            var api = new AzureSphereAPI();
             try
             {
-                await api.AuthenticationAsync(cancellationTokenSource.Token);
+                await _Api.AuthenticationAsync(cancellationTokenSource.Token);
             }
             catch (Exception)
             {
@@ -42,7 +43,7 @@ namespace AzureSphereExplorer
                 return;
             }
 
-            var tenants = await api.GetTenantsAsync(cancellationTokenSource.Token);
+            var tenants = await _Api.GetTenantsAsync(cancellationTokenSource.Token);
             var dialog = new TenantsWindow();
             dialog.Owner = this;
             dialog.Tenants = tenants;
@@ -57,9 +58,9 @@ namespace AzureSphereExplorer
 
             this.Title = $"Azure Sphere Explorer - {tenant.Name}";
 
-            var products = await tenant.GetProductsAsync(cancellationTokenSource.Token);
-            var deviceGroups = await tenant.GetDeviceGroupsAsync(cancellationTokenSource.Token);
-            var devices = await tenant.GetDevicesAsync(cancellationTokenSource.Token);
+            var products = await _Api.GetProductsAsync(tenant, cancellationTokenSource.Token);
+            var deviceGroups = await _Api.GetDeviceGroupsAsync(tenant, cancellationTokenSource.Token);
+            var devices = await _Api.GetDevicesAsync(tenant, cancellationTokenSource.Token);
 
             this.gridProducts.ItemsSource = from v in products
                                             select new { 

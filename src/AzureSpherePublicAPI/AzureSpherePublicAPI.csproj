@@ -55,7 +55,7 @@
     <Compile Include="Model\AzureSphereDevice.cs" />
     <Compile Include="Model\AzureSphereDeviceGroup.cs" />
     <Compile Include="Model\AzureSphereProduct.cs" />
-    <Compile Include="AzureSphereTenant.cs" />
+    <Compile Include="Model\AzureSphereTenant.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
