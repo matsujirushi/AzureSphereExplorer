@@ -22,6 +22,7 @@ namespace AzureSphereExplorer
     public partial class MainWindow : Window
     {
         private AzureSphereAPI _Api = new AzureSphereAPI();
+        private AzureSphereTenant _Tenant;
 
         public MainWindow()
         {
@@ -53,14 +54,14 @@ namespace AzureSphereExplorer
                 Close();
                 return;
             }
-            var tenant = dialog.SelectedTenant;
+            _Tenant = dialog.SelectedTenant;
             dialog = null;
 
-            this.Title = $"Azure Sphere Explorer - {tenant.Name}";
+            this.Title = $"Azure Sphere Explorer - {_Tenant.Name}";
 
-            var products = await _Api.GetProductsAsync(tenant, cancellationTokenSource.Token);
-            var deviceGroups = await _Api.GetDeviceGroupsAsync(tenant, cancellationTokenSource.Token);
-            var devices = await _Api.GetDevicesAsync(tenant, cancellationTokenSource.Token);
+            var products = await _Api.GetProductsAsync(_Tenant, cancellationTokenSource.Token);
+            var deviceGroups = await _Api.GetDeviceGroupsAsync(_Tenant, cancellationTokenSource.Token);
+            var devices = await _Api.GetDevicesAsync(_Tenant, cancellationTokenSource.Token);
 
             this.gridProducts.ItemsSource = from v in products
                                             select new { 
@@ -70,10 +71,12 @@ namespace AzureSphereExplorer
 
             this.gridDeviceGroups.ItemsSource = from v in deviceGroups
                                                 join p in products on v.ProductId equals p.Id
-                                                select new {
+                                                select new DeviceGroupModel
+                                                {
+                                                    Context = v,
                                                     Product = p.Name,
                                                     DeviceGroup = v.Name,
-                                                    v.Description,
+                                                    Description = v.Description,
                                                     OsFeedType = v.OsFeedTypeStr,
                                                     UpdatePolicy = v.UpdatePolicyStr,
                                                     CurrentDeploymentDateUtc = v.CurrentDeployment?.DeploymentDateUtc
@@ -92,9 +95,13 @@ namespace AzureSphereExplorer
                                            };
         }
 
-        private void menuitemDeviceGroupDeployments_Click(object sender, RoutedEventArgs e)
+        private async void menuitemDeviceGroupDeployments_Click(object sender, RoutedEventArgs e)
         {
-            //var deviceGroup = gridDeviceGroups.SelectedItem as AzureSphereDeviceGroup;
+            var model = gridDeviceGroups.SelectedItem as DeviceGroupModel;
+            var deviceGroup = model.Context;
+
+            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+            var deployments = await _Api.GetDeploymentsAsync(_Tenant, deviceGroup, cancellationTokenSource.Token);
         }
     }
 }

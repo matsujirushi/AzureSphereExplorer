@@ -56,7 +56,21 @@
                 <TextBlock Style="{DynamicResource MaterialDesignCaptionTextBlock}" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}" Background="{DynamicResource PrimaryHueLightBrush}">
                     Device Groups
                 </TextBlock>
-                <DataGrid Grid.Row="1" x:Name="gridDeviceGroups" IsReadOnly="True" SelectionMode="Single" ContextMenu="{DynamicResource menuDeviceGroup}"/>
+                <DataGrid Grid.Row="1" 
+                          x:Name="gridDeviceGroups" 
+                          IsReadOnly="True" 
+                          SelectionMode="Single" 
+                          AutoGenerateColumns="False"
+                          ContextMenu="{DynamicResource menuDeviceGroup}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Product" Binding="{Binding Product}"/>
+                        <DataGridTextColumn Header="Device Group" Binding="{Binding DeviceGroup}"/>
+                        <DataGridTextColumn Header="Description" Binding="{Binding Description}"/>
+                        <DataGridTextColumn Header="Os Feed Type" Binding="{Binding OsFeedType}"/>
+                        <DataGridTextColumn Header="Update Policy" Binding="{Binding UpdatePolicy}"/>
+                        <DataGridTextColumn Header="Current Deployment Date" Binding="{Binding CurrentDeploymentDateUtc}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
             </Grid>
             
         </Grid>

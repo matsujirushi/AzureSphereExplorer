@@ -66,6 +66,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Model\DeviceGroupModel.cs" />
     <Compile Include="TenantsWindow.xaml.cs">
       <DependentUpon>TenantsWindow.xaml</DependentUpon>
     </Compile>
