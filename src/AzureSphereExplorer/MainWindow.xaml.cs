@@ -102,6 +102,14 @@ namespace AzureSphereExplorer
 
             CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
             var deployments = await _Api.GetDeploymentsAsync(_Tenant, deviceGroup, cancellationTokenSource.Token);
+
+            var dialog = new DeploymentsWindow();
+            dialog.Owner = this;
+            dialog.Title += $" - {model.Product},{model.DeviceGroup}";
+
+            dialog.Deployments = deployments;
+            var dialogResult = dialog.ShowDialog();
+            dialog = null;
         }
     }
 }
