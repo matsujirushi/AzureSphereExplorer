@@ -15,6 +15,10 @@
         FontFamily="{DynamicResource MaterialDesignFont}"
         Title="Azure Sphere Explorer" Height="600" Width="1024" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen">
     <Window.Resources>
+        <ContextMenu x:Key="menuProduct">
+            <MenuItem Header="Copy ID to clipboard" Click="menuitemProductCopyId_Click"/>
+            <MenuItem Header="Copy show command to clipboard" Click="menuitemProductCopyShowCommand_Click"/>
+        </ContextMenu>
         <ContextMenu x:Key="menuDeviceGroup">
             <MenuItem Header="Deployments..." Click="menuitemDeviceGroupDeployments_Click"/>
             <Separator/>
@@ -46,7 +50,18 @@
                 <TextBlock Style="{DynamicResource MaterialDesignCaptionTextBlock}" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}" Background="{DynamicResource PrimaryHueLightBrush}">
                     Products
                 </TextBlock>
-                <DataGrid Grid.Row="1" x:Name="gridProducts" IsReadOnly="True" SelectionMode="Single"/>
+                <DataGrid Grid.Row="1" 
+                          x:Name="gridProducts" 
+                          IsReadOnly="True" 
+                          SelectionMode="Single"
+                          AutoGenerateColumns="False"
+                          ContextMenu="{DynamicResource menuProduct}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Product" Binding="{Binding Product}"/>
+                        <DataGridTextColumn Header="Description" Binding="{Binding Description}"/>
+                    </DataGrid.Columns>
+
+                </DataGrid>
             </Grid>
             
             <GridSplitter Grid.Row="1" Height="5" HorizontalAlignment="Stretch"/>

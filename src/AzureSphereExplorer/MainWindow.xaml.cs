@@ -64,9 +64,11 @@ namespace AzureSphereExplorer
             var devices = await _Api.GetDevicesAsync(_Tenant, cancellationTokenSource.Token);
 
             this.gridProducts.ItemsSource = from v in products
-                                            select new { 
+                                            select new ProductModel
+                                            { 
+                                                Context = v,
                                                 Product = v.Name,
-                                                v.Description
+                                                Description = v.Description
                                             };
 
             this.gridDeviceGroups.ItemsSource = from v in deviceGroups
@@ -93,6 +95,22 @@ namespace AzureSphereExplorer
                                                ChipSku = v.ChipSkuStr,
                                                DeviceId = v.Id
                                            };
+        }
+
+        private void menuitemProductCopyId_Click(object sender, RoutedEventArgs e)
+        {
+            var model = gridProducts.SelectedItem as ProductModel;
+            var product = model.Context;
+
+            Clipboard.SetText(product.Id);
+        }
+
+        private void menuitemProductCopyShowCommand_Click(object sender, RoutedEventArgs e)
+        {
+            var model = gridProducts.SelectedItem as ProductModel;
+            var product = model.Context;
+
+            Clipboard.SetText($"azsphere prd show -i {product.Id}");
         }
 
         private async void menuitemDeviceGroupDeployments_Click(object sender, RoutedEventArgs e)
