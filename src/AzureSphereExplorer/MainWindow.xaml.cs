@@ -95,6 +95,14 @@ namespace AzureSphereExplorer
                                            };
         }
 
+        private void menuitemDeviceGroupCopyId_Click(object sender, RoutedEventArgs e)
+        {
+            var model = gridDeviceGroups.SelectedItem as DeviceGroupModel;
+            var deviceGroup = model.Context;
+
+            Clipboard.SetText(deviceGroup.Id);
+        }
+
         private async void menuitemDeviceGroupDeployments_Click(object sender, RoutedEventArgs e)
         {
             var model = gridDeviceGroups.SelectedItem as DeviceGroupModel;
