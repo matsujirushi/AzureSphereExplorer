@@ -95,14 +95,6 @@ namespace AzureSphereExplorer
                                            };
         }
 
-        private void menuitemDeviceGroupCopyId_Click(object sender, RoutedEventArgs e)
-        {
-            var model = gridDeviceGroups.SelectedItem as DeviceGroupModel;
-            var deviceGroup = model.Context;
-
-            Clipboard.SetText(deviceGroup.Id);
-        }
-
         private async void menuitemDeviceGroupDeployments_Click(object sender, RoutedEventArgs e)
         {
             var model = gridDeviceGroups.SelectedItem as DeviceGroupModel;
@@ -119,5 +111,22 @@ namespace AzureSphereExplorer
             var dialogResult = dialog.ShowDialog();
             dialog = null;
         }
+
+        private void menuitemDeviceGroupCopyId_Click(object sender, RoutedEventArgs e)
+        {
+            var model = gridDeviceGroups.SelectedItem as DeviceGroupModel;
+            var deviceGroup = model.Context;
+
+            Clipboard.SetText(deviceGroup.Id);
+        }
+
+        private void menuitemDeviceGroupCopyShowCommand_Click(object sender, RoutedEventArgs e)
+        {
+            var model = gridDeviceGroups.SelectedItem as DeviceGroupModel;
+            var deviceGroup = model.Context;
+
+            Clipboard.SetText($"azsphere dg show -i {deviceGroup.Id}");
+        }
+
     }
 }

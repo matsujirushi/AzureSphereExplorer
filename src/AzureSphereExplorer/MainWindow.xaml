@@ -16,8 +16,10 @@
         Title="Azure Sphere Explorer" Height="600" Width="1024" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <ContextMenu x:Key="menuDeviceGroup">
-            <MenuItem Header="Copy ID to clipboard" Click="menuitemDeviceGroupCopyId_Click"/>
             <MenuItem Header="Deployments..." Click="menuitemDeviceGroupDeployments_Click"/>
+            <Separator/>
+            <MenuItem Header="Copy ID to clipboard" Click="menuitemDeviceGroupCopyId_Click"/>
+            <MenuItem Header="Copy show command to clipboard" Click="menuitemDeviceGroupCopyShowCommand_Click"/>
         </ContextMenu>
     </Window.Resources>
     <Grid>
