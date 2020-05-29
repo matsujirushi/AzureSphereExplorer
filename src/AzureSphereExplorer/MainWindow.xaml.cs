@@ -89,11 +89,13 @@ namespace AzureSphereExplorer
                                            from dg_ in gj.DefaultIfEmpty()
                                            join p in products on dg_?.ProductId equals p.Id into gj2
                                            from p_ in gj2.DefaultIfEmpty()
-                                           select new { 
+                                           select new DeviceModel
+                                           { 
+                                               Context = v,
                                                Product = p_?.Name,
                                                DeviceGroup = dg_?.Name,
                                                ChipSku = v.ChipSkuStr,
-                                               DeviceId = v.Id
+                                               Id = v.Id
                                            };
         }
 
@@ -144,6 +146,22 @@ namespace AzureSphereExplorer
             var deviceGroup = model.Context;
 
             Clipboard.SetText($"azsphere dg show -i {deviceGroup.Id}");
+        }
+
+        private void menuitemDeviceCopyId_Click(object sender, RoutedEventArgs e)
+        {
+            var model = gridDevices.SelectedItem as DeviceModel;
+            var device = model.Context;
+
+            Clipboard.SetText(device.Id);
+        }
+
+        private void menuitemDeviceCopyShowCommand_Click(object sender, RoutedEventArgs e)
+        {
+            var model = gridDevices.SelectedItem as DeviceModel;
+            var device = model.Context;
+
+            Clipboard.SetText($"azsphere dev show -i {device.Id}");
         }
 
     }

@@ -25,6 +25,10 @@
             <MenuItem Header="Copy ID to clipboard" Click="menuitemDeviceGroupCopyId_Click"/>
             <MenuItem Header="Copy show command to clipboard" Click="menuitemDeviceGroupCopyShowCommand_Click"/>
         </ContextMenu>
+        <ContextMenu x:Key="menuDevice">
+            <MenuItem Header="Copy ID to clipboard" Click="menuitemDeviceCopyId_Click"/>
+            <MenuItem Header="Copy show command to clipboard" Click="menuitemDeviceCopyShowCommand_Click"/>
+        </ContextMenu>
     </Window.Resources>
     <Grid>
 
@@ -103,7 +107,19 @@
             <TextBlock Style="{DynamicResource MaterialDesignCaptionTextBlock}" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}" Background="{DynamicResource PrimaryHueLightBrush}">
                 Devices
             </TextBlock>
-            <DataGrid Grid.Row="1" x:Name="gridDevices" IsReadOnly="True" SelectionMode="Single"/>
+            <DataGrid Grid.Row="1" 
+                      x:Name="gridDevices" 
+                      IsReadOnly="True" 
+                      SelectionMode="Single"
+                          AutoGenerateColumns="False"
+                          ContextMenu="{DynamicResource menuDevice}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Product" Binding="{Binding Product}"/>
+                    <DataGridTextColumn Header="Device Group" Binding="{Binding DeviceGroup}"/>
+                    <DataGridTextColumn Header="Chip SKU" Binding="{Binding ChipSku}"/>
+                    <DataGridTextColumn Header="ID" Binding="{Binding Id}"/>
+                </DataGrid.Columns>
+            </DataGrid>
         </Grid>
 
     </Grid>

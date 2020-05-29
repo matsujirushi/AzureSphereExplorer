@@ -69,6 +69,7 @@
     <Compile Include="DeploymentsWindow.xaml.cs">
       <DependentUpon>DeploymentsWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Model\DeviceModel.cs" />
     <Compile Include="Model\ProductModel.cs" />
     <Compile Include="Model\DeviceGroupModel.cs" />
     <Compile Include="TenantsWindow.xaml.cs">
