@@ -13,7 +13,7 @@
         TextOptions.TextRenderingMode="Auto"        
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
-        Title="Deployments" Height="400" Width="800" Loaded="Window_Loaded" WindowStartupLocation="CenterOwner" ShowInTaskbar="False">
+        Title="Deployments" Height="400" Width="600" Loaded="Window_Loaded" WindowStartupLocation="CenterOwner" ShowInTaskbar="False">
     <Grid>
 
         <Grid.ColumnDefinitions>
@@ -21,7 +21,15 @@
             <ColumnDefinition Width="120"/>
         </Grid.ColumnDefinitions>
 
-        <DataGrid x:Name="gridDeployments" IsReadOnly="True" SelectionMode="Single"/>
+        <DataGrid x:Name="gridDeployments" 
+                  IsReadOnly="True" 
+                  SelectionMode="Single"
+                  AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Current Deployment Date" Binding="{Binding CurrentDeploymentDate}"/>
+                <DataGridTextColumn Header="Images#" Binding="{Binding NumberOfImages}"/>
+            </DataGrid.Columns>
+        </DataGrid>
 
         <StackPanel Grid.Column="1" Orientation="Vertical">
             <Button Width="100" Height="30" Margin="5" Content="Close" Click="Close_Click" IsDefault="True"/>

@@ -64,7 +64,6 @@
                         <DataGridTextColumn Header="Product" Binding="{Binding Product}"/>
                         <DataGridTextColumn Header="Description" Binding="{Binding Description}"/>
                     </DataGrid.Columns>
-
                 </DataGrid>
             </Grid>
             
@@ -90,7 +89,7 @@
                         <DataGridTextColumn Header="Description" Binding="{Binding Description}"/>
                         <DataGridTextColumn Header="Os Feed Type" Binding="{Binding OsFeedType}"/>
                         <DataGridTextColumn Header="Update Policy" Binding="{Binding UpdatePolicy}"/>
-                        <DataGridTextColumn Header="Current Deployment Date" Binding="{Binding CurrentDeploymentDateUtc}"/>
+                        <DataGridTextColumn Header="Current Deployment Date" Binding="{Binding CurrentDeploymentDate}"/>
                     </DataGrid.Columns>
                 </DataGrid>
             </Grid>

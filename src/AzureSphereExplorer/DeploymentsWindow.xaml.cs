@@ -29,7 +29,13 @@ namespace AzureSphereExplorer
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            this.gridDeployments.ItemsSource = Deployments;
+            this.gridDeployments.ItemsSource = from v in Deployments
+                                               select new DeploymentModel
+                                               {
+                                                   Context = v,
+                                                   CurrentDeploymentDate = v.DeploymentDateUtc.ToLocalTime(),
+                                                   NumberOfImages = v.DeployedImages.Count
+                                               };
         }
 
         private void Close_Click(object sender, RoutedEventArgs e)

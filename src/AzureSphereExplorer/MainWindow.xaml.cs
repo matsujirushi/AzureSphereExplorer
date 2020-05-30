@@ -81,7 +81,7 @@ namespace AzureSphereExplorer
                                                     Description = v.Description,
                                                     OsFeedType = v.OsFeedTypeStr,
                                                     UpdatePolicy = v.UpdatePolicyStr,
-                                                    CurrentDeploymentDateUtc = v.CurrentDeployment?.DeploymentDateUtc
+                                                    CurrentDeploymentDate = v.CurrentDeployment?.DeploymentDateUtc.ToLocalTime()
                                                 };
 
             this.gridDevices.ItemsSource = from v in devices

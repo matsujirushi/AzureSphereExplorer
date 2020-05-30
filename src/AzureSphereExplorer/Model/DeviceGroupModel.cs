@@ -16,6 +16,6 @@ namespace AzureSphereExplorer
         public string Description { get; set; }
         public string OsFeedType { get; set; }
         public string UpdatePolicy { get; set; }
-        public string CurrentDeploymentDateUtc { get; set; }
+        public DateTime? CurrentDeploymentDate { get; set; }
     }
 }
