@@ -1,4 +1,4 @@
-﻿<Window x:Class="AzureSphereExplorer.DeploymentsWindow"
+﻿<Window x:Class="AzureSphereExplorer.ImagesWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -13,12 +13,7 @@
         TextOptions.TextRenderingMode="Auto"        
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
-        Title="Deployments" Height="400" Width="600" Loaded="Window_Loaded" WindowStartupLocation="CenterOwner" ShowInTaskbar="False">
-    <Window.Resources>
-        <ContextMenu x:Key="menuDeployment">
-            <MenuItem Header="Images..." Click="menuitemImages_Click"/>
-        </ContextMenu>
-    </Window.Resources>
+        Title="Images" Height="400" Width="1000" Loaded="Window_Loaded" WindowStartupLocation="CenterOwner" ShowInTaskbar="False">
     <Grid>
 
         <Grid.ColumnDefinitions>
@@ -26,15 +21,10 @@
             <ColumnDefinition Width="120"/>
         </Grid.ColumnDefinitions>
 
-        <DataGrid x:Name="gridDeployments" 
+        <DataGrid x:Name="gridImages" 
                   IsReadOnly="True" 
                   SelectionMode="Single"
-                  AutoGenerateColumns="False"
-                  ContextMenu="{DynamicResource menuDeployment}">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Current Deployment Date" Binding="{Binding CurrentDeploymentDate}"/>
-                <DataGridTextColumn Header="Images#" Binding="{Binding NumberOfImages}"/>
-            </DataGrid.Columns>
+                  AutoGenerateColumns="True">
         </DataGrid>
 
         <StackPanel Grid.Column="1" Orientation="Vertical">

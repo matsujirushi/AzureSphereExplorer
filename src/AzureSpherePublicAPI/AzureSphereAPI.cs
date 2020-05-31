@@ -119,6 +119,16 @@ namespace AzureSpherePublicAPI
             return deployments;
         }
 
+        public async Task<AzureSphereImage> GetImageAsync(AzureSphereTenant tenant, string imageId, CancellationToken cancellationToken)
+        {
+            var jsonString = await GetAsync($"v2/tenants/{tenant.Id}/images/{imageId}/metadata", cancellationToken);
+            Console.WriteLine("GetImageAsync()");
+            Console.WriteLine(jsonString);
+            var json = JToken.Parse(jsonString);
+
+            return new AzureSphereImage(json);
+        }
+
         internal async Task<string> GetAsync(string relativeUrl, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(AccessToken)) throw new ApplicationException();

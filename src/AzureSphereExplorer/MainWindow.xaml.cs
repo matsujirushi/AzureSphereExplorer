@@ -21,8 +21,8 @@ namespace AzureSphereExplorer
     /// </summary>
     public partial class MainWindow : Window
     {
-        private AzureSphereAPI _Api = new AzureSphereAPI();
-        private AzureSphereTenant _Tenant;
+        internal AzureSphereAPI Api = new AzureSphereAPI();
+        internal AzureSphereTenant Tenant;
 
         public MainWindow()
         {
@@ -35,7 +35,7 @@ namespace AzureSphereExplorer
 
             try
             {
-                await _Api.AuthenticationAsync(cancellationTokenSource.Token);
+                await Api.AuthenticationAsync(cancellationTokenSource.Token);
             }
             catch (Exception)
             {
@@ -44,7 +44,7 @@ namespace AzureSphereExplorer
                 return;
             }
 
-            var tenants = await _Api.GetTenantsAsync(cancellationTokenSource.Token);
+            var tenants = await Api.GetTenantsAsync(cancellationTokenSource.Token);
             var dialog = new TenantsWindow();
             dialog.Owner = this;
             dialog.Tenants = tenants;
@@ -54,14 +54,14 @@ namespace AzureSphereExplorer
                 Close();
                 return;
             }
-            _Tenant = dialog.SelectedTenant;
+            Tenant = dialog.SelectedTenant;
             dialog = null;
 
-            this.Title = $"Azure Sphere Explorer - {_Tenant.Name}";
+            this.Title = $"Azure Sphere Explorer - {Tenant.Name}";
 
-            var products = await _Api.GetProductsAsync(_Tenant, cancellationTokenSource.Token);
-            var deviceGroups = await _Api.GetDeviceGroupsAsync(_Tenant, cancellationTokenSource.Token);
-            var devices = await _Api.GetDevicesAsync(_Tenant, cancellationTokenSource.Token);
+            var products = await Api.GetProductsAsync(Tenant, cancellationTokenSource.Token);
+            var deviceGroups = await Api.GetDeviceGroupsAsync(Tenant, cancellationTokenSource.Token);
+            var devices = await Api.GetDevicesAsync(Tenant, cancellationTokenSource.Token);
 
             this.gridProducts.ItemsSource = from v in products
                                             select new ProductModel
@@ -121,12 +121,11 @@ namespace AzureSphereExplorer
             var deviceGroup = model.Context;
 
             CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-            var deployments = await _Api.GetDeploymentsAsync(_Tenant, deviceGroup, cancellationTokenSource.Token);
+            var deployments = await Api.GetDeploymentsAsync(Tenant, deviceGroup, cancellationTokenSource.Token);
 
             var dialog = new DeploymentsWindow();
             dialog.Owner = this;
             dialog.Title += $" - {model.Product},{model.DeviceGroup}";
-
             dialog.Deployments = deployments;
             var dialogResult = dialog.ShowDialog();
             dialog = null;
