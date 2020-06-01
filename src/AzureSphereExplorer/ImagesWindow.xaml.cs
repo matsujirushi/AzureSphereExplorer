@@ -29,7 +29,14 @@ namespace AzureSphereExplorer
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            this.gridImages.ItemsSource = Images;
+            this.gridImages.ItemsSource = from v in Images
+                                               select new ImageModel
+                                               {
+                                                   Context = v,
+                                                   Image = v.Name,
+                                                   Description = v.Description,
+                                                   ImageType = v.ImageType
+                                               };
         }
 
         private void Close_Click(object sender, RoutedEventArgs e)

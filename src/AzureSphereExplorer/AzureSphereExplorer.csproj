@@ -73,6 +73,7 @@
       <DependentUpon>ImagesWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Model\DeploymentModel.cs" />
+    <Compile Include="Model\ImageModel.cs" />
     <Compile Include="Model\DeviceModel.cs" />
     <Compile Include="Model\ProductModel.cs" />
     <Compile Include="Model\DeviceGroupModel.cs" />

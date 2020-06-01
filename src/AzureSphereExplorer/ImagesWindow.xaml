@@ -24,7 +24,12 @@
         <DataGrid x:Name="gridImages" 
                   IsReadOnly="True" 
                   SelectionMode="Single"
-                  AutoGenerateColumns="True">
+                  AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Image" Binding="{Binding Image}"/>
+                <DataGridTextColumn Header="Description" Binding="{Binding Description}"/>
+                <DataGridTextColumn Header="Image Type" Binding="{Binding ImageType}"/>
+            </DataGrid.Columns>
         </DataGrid>
 
         <StackPanel Grid.Column="1" Orientation="Vertical">
