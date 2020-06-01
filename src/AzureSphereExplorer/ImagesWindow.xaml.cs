@@ -43,5 +43,21 @@ namespace AzureSphereExplorer
         {
             this.DialogResult = true;
         }
+
+        private void menuitemImageCopyId_Click(object sender, RoutedEventArgs e)
+        {
+            var model = gridImages.SelectedItem as ImageModel;
+            var image = model.Context;
+
+            Clipboard.SetText(image.Id);
+        }
+
+        private void menuitemImageCopyShowCommand_Click(object sender, RoutedEventArgs e)
+        {
+            var model = gridImages.SelectedItem as ImageModel;
+            var image = model.Context;
+
+            Clipboard.SetText($"azsphere img show -i {image.Id}");
+        }
     }
 }

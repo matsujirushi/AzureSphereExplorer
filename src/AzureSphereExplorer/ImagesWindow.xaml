@@ -14,6 +14,12 @@
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
         Title="Images" Height="400" Width="1000" Loaded="Window_Loaded" WindowStartupLocation="CenterOwner" ShowInTaskbar="False">
+    <Window.Resources>
+        <ContextMenu x:Key="menuImage">
+            <MenuItem Header="Copy ID to clipboard" Click="menuitemImageCopyId_Click"/>
+            <MenuItem Header="Copy show command to clipboard" Click="menuitemImageCopyShowCommand_Click"/>
+        </ContextMenu>
+    </Window.Resources>
     <Grid>
 
         <Grid.ColumnDefinitions>
@@ -24,7 +30,8 @@
         <DataGrid x:Name="gridImages" 
                   IsReadOnly="True" 
                   SelectionMode="Single"
-                  AutoGenerateColumns="False">
+                  AutoGenerateColumns="False"
+                  ContextMenu="{DynamicResource menuImage}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Image" Binding="{Binding Image}"/>
                 <DataGridTextColumn Header="Description" Binding="{Binding Description}"/>
