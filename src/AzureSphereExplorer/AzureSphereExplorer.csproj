@@ -77,6 +77,7 @@
     <Compile Include="Model\DeviceModel.cs" />
     <Compile Include="Model\ProductModel.cs" />
     <Compile Include="Model\DeviceGroupModel.cs" />
+    <Compile Include="Model\TenantModel.cs" />
     <Compile Include="TenantsWindow.xaml.cs">
       <DependentUpon>TenantsWindow.xaml</DependentUpon>
     </Compile>

@@ -14,14 +14,27 @@
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
         Title="Tenants" Height="400" Width="600" Loaded="Window_Loaded" WindowStartupLocation="CenterOwner" ShowInTaskbar="False">
+    <Window.Resources>
+        <ContextMenu x:Key="menuTenant">
+            <MenuItem Header="Copy ID to clipboard" Click="menuitemTenantCopyId_Click"/>
+        </ContextMenu>
+    </Window.Resources>
     <Grid>
         
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition Width="120"/>
         </Grid.ColumnDefinitions>
-        
-        <DataGrid x:Name="gridTenants" IsReadOnly="True" SelectionMode="Single"/>
+
+        <DataGrid x:Name="gridTenants" 
+                  IsReadOnly="True" 
+                  SelectionMode="Single"
+                  AutoGenerateColumns="False"
+                  ContextMenu="{DynamicResource menuTenant}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Tenant" Binding="{Binding Tenant}"/>
+            </DataGrid.Columns>
+        </DataGrid>
 
         <StackPanel Grid.Column="1" Orientation="Vertical">
             <Button Width="100" Height="30" Margin="5" Content="OK" Click="OK_Click" IsDefault="True"/>

@@ -30,7 +30,12 @@ namespace AzureSphereExplorer
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            this.gridTenants.ItemsSource = Tenants;
+            this.gridTenants.ItemsSource = from v in Tenants
+                                           select new TenantModel
+                                           {
+                                               Context = v,
+                                               Tenant = v.Name
+                                           };
         }
 
         private void OK_Click(object sender, RoutedEventArgs e)
@@ -41,7 +46,7 @@ namespace AzureSphereExplorer
                 return;
             }
 
-            this.SelectedTenant = (AzureSphereTenant)this.gridTenants.SelectedItem;
+            this.SelectedTenant = ((TenantModel)this.gridTenants.SelectedItem).Context;
 
             this.DialogResult = true;
         }
@@ -51,5 +56,12 @@ namespace AzureSphereExplorer
             this.DialogResult = false;
         }
 
+        private void menuitemTenantCopyId_Click(object sender, RoutedEventArgs e)
+        {
+            var model = gridTenants.SelectedItem as TenantModel;
+            var tenant = model.Context;
+
+            Clipboard.SetText(tenant.Id);
+        }
     }
 }
