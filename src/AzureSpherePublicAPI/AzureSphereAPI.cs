@@ -129,6 +129,23 @@ namespace AzureSpherePublicAPI
             return new AzureSphereImage(json);
         }
 
+        public async Task<List<AzureSphereDeviceInsight>> GetDeviceInsightsAsync(AzureSphereTenant tenant, CancellationToken cancellationToken)
+        {
+            var jsonString = await GetAsync($"v2/tenants/{tenant.Id}/getDeviceInsights", cancellationToken);
+            Console.WriteLine("GetDeviceInsightsAsync()");
+            Console.WriteLine(jsonString);
+            var json = JToken.Parse(jsonString);
+            var jsonDeviceInsights = json.Value<JArray>("Items");
+
+            var deviceInsights = new List<AzureSphereDeviceInsight>();
+            foreach (var jsonDeviceInsight in jsonDeviceInsights)
+            {
+                deviceInsights.Add(new AzureSphereDeviceInsight(jsonDeviceInsight));
+            }
+
+            return deviceInsights;
+        }
+
         internal async Task<string> GetAsync(string relativeUrl, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(AccessToken)) throw new ApplicationException();

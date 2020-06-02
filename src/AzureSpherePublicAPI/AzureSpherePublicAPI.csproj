@@ -51,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AzureSphereAPI.cs" />
+    <Compile Include="Model\AzureSphereDeviceInsight.cs" />
     <Compile Include="Model\AzureSphereImage.cs" />
     <Compile Include="Model\AzureSphereDeployment.cs" />
     <Compile Include="Model\AzureSphereDevice.cs" />
