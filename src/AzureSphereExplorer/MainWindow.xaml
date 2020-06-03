@@ -30,96 +30,103 @@
             <MenuItem Header="Copy show command to clipboard" Click="menuitemDeviceCopyShowCommand_Click"/>
         </ContextMenu>
     </Window.Resources>
-    <Grid>
-
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
-
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="View">
+                <MenuItem Header="Error Reports..." Click="menuitemErrorReports_Click"/>
+            </MenuItem>
+        </Menu>
         <Grid>
-            
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
 
             <Grid>
+            
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Style="{DynamicResource MaterialDesignCaptionTextBlock}" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}" Background="{DynamicResource PrimaryHueLightBrush}">
+                        Products
+                    </TextBlock>
+                    <DataGrid Grid.Row="1" 
+                              x:Name="gridProducts" 
+                              IsReadOnly="True" 
+                              SelectionMode="Single"
+                              AutoGenerateColumns="False"
+                              ContextMenu="{DynamicResource menuProduct}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Product" Binding="{Binding Product}"/>
+                            <DataGridTextColumn Header="Description" Binding="{Binding Description}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            
+                <GridSplitter Grid.Row="1" Height="5" HorizontalAlignment="Stretch"/>
+
+                <Grid Grid.Row="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Style="{DynamicResource MaterialDesignCaptionTextBlock}" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}" Background="{DynamicResource PrimaryHueLightBrush}">
+                        Device Groups
+                    </TextBlock>
+                    <DataGrid Grid.Row="1" 
+                              x:Name="gridDeviceGroups" 
+                              IsReadOnly="True" 
+                              SelectionMode="Single" 
+                              AutoGenerateColumns="False"
+                              ContextMenu="{DynamicResource menuDeviceGroup}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Product" Binding="{Binding Product}"/>
+                            <DataGridTextColumn Header="Device Group" Binding="{Binding DeviceGroup}"/>
+                            <DataGridTextColumn Header="Description" Binding="{Binding Description}"/>
+                            <DataGridTextColumn Header="Os Feed Type" Binding="{Binding OsFeedType}"/>
+                            <DataGridTextColumn Header="Update Policy" Binding="{Binding UpdatePolicy}"/>
+                            <DataGridTextColumn Header="Current Deployment Date" Binding="{Binding CurrentDeploymentDate}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            
+            </Grid>
+
+            <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch"/>
+
+            <Grid Grid.Column="2">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
                 <TextBlock Style="{DynamicResource MaterialDesignCaptionTextBlock}" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}" Background="{DynamicResource PrimaryHueLightBrush}">
-                    Products
+                    Devices
                 </TextBlock>
                 <DataGrid Grid.Row="1" 
-                          x:Name="gridProducts" 
+                          x:Name="gridDevices" 
                           IsReadOnly="True" 
                           SelectionMode="Single"
-                          AutoGenerateColumns="False"
-                          ContextMenu="{DynamicResource menuProduct}">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="Product" Binding="{Binding Product}"/>
-                        <DataGridTextColumn Header="Description" Binding="{Binding Description}"/>
-                    </DataGrid.Columns>
-                </DataGrid>
-            </Grid>
-            
-            <GridSplitter Grid.Row="1" Height="5" HorizontalAlignment="Stretch"/>
-
-            <Grid Grid.Row="2">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <TextBlock Style="{DynamicResource MaterialDesignCaptionTextBlock}" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}" Background="{DynamicResource PrimaryHueLightBrush}">
-                    Device Groups
-                </TextBlock>
-                <DataGrid Grid.Row="1" 
-                          x:Name="gridDeviceGroups" 
-                          IsReadOnly="True" 
-                          SelectionMode="Single" 
-                          AutoGenerateColumns="False"
-                          ContextMenu="{DynamicResource menuDeviceGroup}">
+                              AutoGenerateColumns="False"
+                              ContextMenu="{DynamicResource menuDevice}">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Product" Binding="{Binding Product}"/>
                         <DataGridTextColumn Header="Device Group" Binding="{Binding DeviceGroup}"/>
-                        <DataGridTextColumn Header="Description" Binding="{Binding Description}"/>
-                        <DataGridTextColumn Header="Os Feed Type" Binding="{Binding OsFeedType}"/>
-                        <DataGridTextColumn Header="Update Policy" Binding="{Binding UpdatePolicy}"/>
-                        <DataGridTextColumn Header="Current Deployment Date" Binding="{Binding CurrentDeploymentDate}"/>
+                        <DataGridTextColumn Header="Chip SKU" Binding="{Binding ChipSku}"/>
+                        <DataGridTextColumn Header="ID" Binding="{Binding Id}"/>
                     </DataGrid.Columns>
                 </DataGrid>
             </Grid>
-            
+
         </Grid>
-
-        <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch"/>
-
-        <Grid Grid.Column="2">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-            <TextBlock Style="{DynamicResource MaterialDesignCaptionTextBlock}" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}" Background="{DynamicResource PrimaryHueLightBrush}">
-                Devices
-            </TextBlock>
-            <DataGrid Grid.Row="1" 
-                      x:Name="gridDevices" 
-                      IsReadOnly="True" 
-                      SelectionMode="Single"
-                          AutoGenerateColumns="False"
-                          ContextMenu="{DynamicResource menuDevice}">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Product" Binding="{Binding Product}"/>
-                    <DataGridTextColumn Header="Device Group" Binding="{Binding DeviceGroup}"/>
-                    <DataGridTextColumn Header="Chip SKU" Binding="{Binding ChipSku}"/>
-                    <DataGridTextColumn Header="ID" Binding="{Binding Id}"/>
-                </DataGrid.Columns>
-            </DataGrid>
-        </Grid>
-
-    </Grid>
+    </DockPanel>
 </Window>

@@ -163,5 +163,16 @@ namespace AzureSphereExplorer
             Clipboard.SetText($"azsphere dev show -i {device.Id}");
         }
 
+        private async void menuitemErrorReports_Click(object sender, RoutedEventArgs e)
+        {
+            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+            var deviceInsights = await Api.GetDeviceInsightsAsync(Tenant, cancellationTokenSource.Token);
+
+            var dialog = new ErrorReportsWindow();
+            dialog.Owner = this;
+            dialog.DeviceInsights = deviceInsights;
+            var dialogResult = dialog.ShowDialog();
+            dialog = null;
+        }
     }
 }

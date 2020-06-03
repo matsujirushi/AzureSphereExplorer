@@ -1,0 +1,35 @@
+﻿<Window x:Class="AzureSphereExplorer.ErrorReportsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AzureSphereExplorer"
+        mc:Ignorable="d"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal" 
+        TextOptions.TextRenderingMode="Auto"        
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignFont}"
+        Title="Error Reports" Height="400" Width="1000" Loaded="Window_Loaded" WindowStartupLocation="CenterOwner" ShowInTaskbar="False">
+    <Grid>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="120"/>
+        </Grid.ColumnDefinitions>
+
+        <DataGrid x:Name="gridErrorReports" 
+                  IsReadOnly="True" 
+                  SelectionMode="Single"
+                  AutoGenerateColumns="True">
+        </DataGrid>
+
+        <StackPanel Grid.Column="1" Orientation="Vertical">
+            <Button Width="100" Height="30" Margin="5" Content="Close" Click="Close_Click" IsDefault="True"/>
+        </StackPanel>
+
+    </Grid>
+</Window>
