@@ -10,8 +10,8 @@ namespace AzureSpherePublicAPI
     public class AzureSphereDeviceInsight
     {
         public string DeviceId { get; private set; }
-        public int StartTimestampInUnix { get; private set; }
-        public int EndTimestampInUnix { get; private set; }
+        public DateTime StartTimestamp { get; private set; }
+        public DateTime EndTimestamp { get; private set; }
         public string Description { get; private set; }
         public string EventType { get; private set; }
         public string EventClass { get; private set; }
@@ -21,8 +21,8 @@ namespace AzureSpherePublicAPI
         internal AzureSphereDeviceInsight(JToken json)
         {
             DeviceId = json.Value<string>("DeviceId");
-            StartTimestampInUnix = json.Value<int>("StartTimestampInUnix");
-            EndTimestampInUnix = json.Value<int>("EndTimestampInUnix");
+            StartTimestamp = DateTimeOffset.FromUnixTimeSeconds(json.Value<int>("StartTimestampInUnix")).DateTime;
+            EndTimestamp = DateTimeOffset.FromUnixTimeSeconds(json.Value<int>("EndTimestampInUnix")).DateTime;
             Description = json.Value<string>("Description");
             EventType = json.Value<string>("EventType");
             EventClass = json.Value<string>("EventClass");

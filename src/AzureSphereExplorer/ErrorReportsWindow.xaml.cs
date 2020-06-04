@@ -29,7 +29,19 @@ namespace AzureSphereExplorer
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            this.gridErrorReports.ItemsSource = DeviceInsights;
+            this.gridErrorReports.ItemsSource = from v in DeviceInsights
+                                                select new DeviceInsightModel
+                                                {
+                                                    Context = v,
+                                                    DeviceId = v.DeviceId,
+                                                    StartTime = v.StartTimestamp.ToLocalTime(),
+                                                    EndTime = v.EndTimestamp.ToLocalTime(),
+                                                    Description = v.Description,
+                                                    EventType = v.EventType,
+                                                    EventClass = v.EventClass,
+                                                    EventCategory = v.EventCategory,
+                                                    EventCount = v.EventCount
+                                                };
         }
 
         private void Close_Click(object sender, RoutedEventArgs e)
