@@ -1,6 +1,7 @@
 ﻿using AzureSpherePublicAPI;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -39,6 +40,9 @@ namespace AzureSphereExplorer
                                                    CurrentDeploymentDate = v.DeploymentDateUtc.ToLocalTime(),
                                                    NumberOfImages = v.DeployedImages.Count
                                                };
+            var viewDeployments = CollectionViewSource.GetDefaultView(this.gridDeployments.ItemsSource);
+            this.gridDeployments.Columns[0].SortDirection = ListSortDirection.Descending;
+            viewDeployments.SortDescriptions.Add(new SortDescription("CurrentDeploymentDate", ListSortDirection.Descending));
         }
 
         private void Close_Click(object sender, RoutedEventArgs e)
