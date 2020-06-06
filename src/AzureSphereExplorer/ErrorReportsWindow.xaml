@@ -24,7 +24,17 @@
         <DataGrid x:Name="gridErrorReports" 
                   IsReadOnly="True" 
                   SelectionMode="Single"
-                  AutoGenerateColumns="True">
+                  AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Start Time" Binding="{Binding StartTime}"/>
+                <DataGridTextColumn Header="End Time" Binding="{Binding EndTime}"/>
+                <DataGridTextColumn Header="Description" Binding="{Binding Description}"/>
+                <DataGridTextColumn Header="Event Count" Binding="{Binding EventCount}"/>
+                <DataGridTextColumn Header="Event Type" Binding="{Binding EventType}"/>
+                <DataGridTextColumn Header="Event Class" Binding="{Binding EventClass}"/>
+                <DataGridTextColumn Header="Event Category" Binding="{Binding EventCategory}"/>
+                <DataGridTextColumn Header="Device ID" Binding="{Binding DeviceId}"/>
+            </DataGrid.Columns>
         </DataGrid>
 
         <StackPanel Grid.Column="1" Orientation="Vertical">
