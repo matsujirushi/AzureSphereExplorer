@@ -1,6 +1,7 @@
 ﻿using AzureSpherePublicAPI;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -42,6 +43,9 @@ namespace AzureSphereExplorer
                                                     EventCategory = v.EventCategory,
                                                     EventCount = v.EventCount
                                                 };
+            var viewErrorReports = CollectionViewSource.GetDefaultView(this.gridErrorReports.ItemsSource);
+            this.gridErrorReports.Columns[0].SortDirection = ListSortDirection.Descending;
+            viewErrorReports.SortDescriptions.Add(new SortDescription("StartTime", ListSortDirection.Descending));
         }
 
         private void Close_Click(object sender, RoutedEventArgs e)
