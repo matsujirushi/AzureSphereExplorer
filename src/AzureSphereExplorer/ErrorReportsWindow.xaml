@@ -14,6 +14,11 @@
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
         Title="Error Reports" Height="400" Width="1000" Loaded="Window_Loaded" WindowStartupLocation="CenterOwner" ShowInTaskbar="False">
+    <Window.Resources>
+        <ContextMenu x:Key="menuErrorReport">
+            <MenuItem Header="Copy to clipboard" Click="menuitemErrorReportCopy_Click"/>
+        </ContextMenu>
+    </Window.Resources>
     <Grid>
 
         <Grid.ColumnDefinitions>
@@ -24,7 +29,8 @@
         <DataGrid x:Name="gridErrorReports" 
                   IsReadOnly="True" 
                   SelectionMode="Single"
-                  AutoGenerateColumns="False">
+                  AutoGenerateColumns="False"
+                  ContextMenu="{DynamicResource menuErrorReport}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Start Time" Binding="{Binding StartTime}"/>
                 <DataGridTextColumn Header="End Time" Binding="{Binding EndTime}"/>

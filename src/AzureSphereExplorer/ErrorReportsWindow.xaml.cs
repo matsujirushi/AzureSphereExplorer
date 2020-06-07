@@ -52,5 +52,13 @@ namespace AzureSphereExplorer
         {
             this.DialogResult = true;
         }
+
+        private void menuitemErrorReportCopy_Click(object sender, RoutedEventArgs e)
+        {
+            var model = gridErrorReports.SelectedItem as DeviceInsightModel;
+            var deviceInsight = model.Context;
+
+            Clipboard.SetText($"{model.StartTime}\t{model.EndTime}\t{model.Description}\t{model.EventCount}\t{model.EventType}\t{model.EventClass}\t{model.EventCategory}\t{model.DeviceId}");
+        }
     }
 }
