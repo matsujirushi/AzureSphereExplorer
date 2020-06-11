@@ -51,6 +51,20 @@ namespace AzureSphereExplorer
             this.DialogResult = true;
         }
 
+        private void gridTenants_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            var element = e.MouseDevice.DirectlyOver as FrameworkElement;
+            if (element == null) return;
+
+            var cell = element.Parent as DataGridCell;
+            if (cell == null) cell = element.TemplatedParent as DataGridCell;
+            if (cell == null) return;
+
+            this.SelectedTenant = ((TenantModel)cell.DataContext).Context;
+
+            this.DialogResult = true;
+        }
+
         private void Cancel_Click(object sender, RoutedEventArgs e)
         {
             this.DialogResult = false;

@@ -30,7 +30,7 @@
                   IsReadOnly="True" 
                   SelectionMode="Single"
                   AutoGenerateColumns="False"
-                  ContextMenu="{DynamicResource menuTenant}">
+                  ContextMenu="{DynamicResource menuTenant}" MouseDoubleClick="gridTenants_MouseDoubleClick">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Tenant" Binding="{Binding Tenant}"/>
             </DataGrid.Columns>
