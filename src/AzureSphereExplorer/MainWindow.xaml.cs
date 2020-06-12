@@ -45,17 +45,29 @@ namespace AzureSphereExplorer
             }
 
             var tenants = await Api.GetTenantsAsync(cancellationTokenSource.Token);
-            var dialog = new TenantsWindow();
-            dialog.Owner = this;
-            dialog.Tenants = tenants;
-            var dialogResult = dialog.ShowDialog();
-            if (!dialogResult.Value)
+            if (tenants.Count <= 0)
             {
+                MessageBox.Show("No azure sphere tenant found.", null, MessageBoxButton.OK, MessageBoxImage.Error);
                 Close();
                 return;
             }
-            Tenant = dialog.SelectedTenant;
-            dialog = null;
+            else if (tenants.Count == 1)
+            {
+                Tenant = tenants[0];
+            }
+            else
+            {
+                var dialog = new TenantsWindow();
+                dialog.Owner = this;
+                dialog.Tenants = tenants;
+                var dialogResult = dialog.ShowDialog();
+                if (!dialogResult.Value)
+                {
+                    Close();
+                    return;
+                }
+                Tenant = dialog.SelectedTenant;
+            }
 
             this.Title = $"Azure Sphere Explorer - {Tenant.Name}";
 
