@@ -17,7 +17,13 @@ Azure Sphereのデバイスやプロダクト、デバイスグループなど�
 
 ### サポートしているプラットフォーム
 
-* Microsoft Windows 10
+* Microsoft Windows 10 (.NET Framework 4.8)
+
+## インストール方法
+
+1. AzureSphereExplorerリポジトリの[Releases](https://github.com/matsujirushi/AzureSphereExplorer/releases)から、最新の`AzureSphereExplorer.zip`をダウンロードしてください。
+1. 適当なフォルダに、`AzureSphereExplorer.zip`を解凍してください。
+1. 解凍した中にある、`AzureSphereExplorer.exe`を起動してください。
 
 ## ライセンス
 

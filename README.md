@@ -21,7 +21,13 @@ If you are interested, click the Star button. Motivation to develop! :-)
 
 ### Supported Platforms
 
-* Microsoft Windows 10
+* Microsoft Windows 10 (.NET Framework 4.8)
+
+## Installation Instructions
+
+1. Download the latest version of `AzureSphereExplorer.zip` from [Releases](https://github.com/matsujirushi/AzureSphereExplorer/releases) in the AzureSphereExplorer repository.
+1. Extract the `AzureSphereExplorer.zip`.
+1. Execute the `AzureSphereExplorer.exe`.
 
 ## Licence
 
