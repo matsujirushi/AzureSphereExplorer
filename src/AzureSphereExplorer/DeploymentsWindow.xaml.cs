@@ -57,9 +57,17 @@ namespace AzureSphereExplorer
 
             CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
             var images = new List<AzureSphereImage>();
-            foreach (var imageId in deployment.DeployedImages)
+            Cursor = Cursors.Wait;
+            try
             {
-                images.Add(await _ParentWindow.Api.GetImageAsync(_ParentWindow.Tenant, imageId, cancellationTokenSource.Token));
+                foreach (var imageId in deployment.DeployedImages)
+                {
+                    images.Add(await _ParentWindow.Api.GetImageAsync(_ParentWindow.Tenant, imageId, cancellationTokenSource.Token));
+                }
+            }
+            finally
+            {
+                Cursor = null;
             }
 
             var dialog = new ImagesWindow();

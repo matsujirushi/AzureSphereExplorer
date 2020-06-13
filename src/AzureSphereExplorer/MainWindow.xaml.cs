@@ -35,7 +35,15 @@ namespace AzureSphereExplorer
 
             try
             {
-                await Api.AuthenticationAsync(cancellationTokenSource.Token);
+                Cursor = Cursors.Wait;
+                try
+                {
+                    await Api.AuthenticationAsync(cancellationTokenSource.Token);
+                }
+                finally
+                {
+                    Cursor = null;
+                }
             }
             catch (Exception)
             {
@@ -44,7 +52,16 @@ namespace AzureSphereExplorer
                 return;
             }
 
-            var tenants = await Api.GetTenantsAsync(cancellationTokenSource.Token);
+            List<AzureSphereTenant> tenants;
+            Cursor = Cursors.Wait;
+            try
+            {
+                tenants = await Api.GetTenantsAsync(cancellationTokenSource.Token);
+            }
+            finally
+            {
+                Cursor = null;
+            }
             if (tenants.Count <= 0)
             {
                 MessageBox.Show("No azure sphere tenant found.", null, MessageBoxButton.OK, MessageBoxImage.Error);
@@ -69,46 +86,54 @@ namespace AzureSphereExplorer
                 Tenant = dialog.SelectedTenant;
             }
 
-            this.Title = $"Azure Sphere Explorer - {Tenant.Name}";
+            Cursor = Cursors.Wait;
+            try
+            {
+                this.Title = $"Azure Sphere Explorer - {Tenant.Name}";
 
-            var products = await Api.GetProductsAsync(Tenant, cancellationTokenSource.Token);
-            var deviceGroups = await Api.GetDeviceGroupsAsync(Tenant, cancellationTokenSource.Token);
-            var devices = await Api.GetDevicesAsync(Tenant, cancellationTokenSource.Token);
+                var products = await Api.GetProductsAsync(Tenant, cancellationTokenSource.Token);
+                var deviceGroups = await Api.GetDeviceGroupsAsync(Tenant, cancellationTokenSource.Token);
+                var devices = await Api.GetDevicesAsync(Tenant, cancellationTokenSource.Token);
 
-            this.gridProducts.ItemsSource = from v in products
-                                            select new ProductModel
-                                            { 
-                                                Context = v,
-                                                Product = v.Name,
-                                                Description = v.Description
-                                            };
-
-            this.gridDeviceGroups.ItemsSource = from v in deviceGroups
-                                                join p in products on v.ProductId equals p.Id
-                                                select new DeviceGroupModel
+                this.gridProducts.ItemsSource = from v in products
+                                                select new ProductModel
                                                 {
                                                     Context = v,
-                                                    Product = p.Name,
-                                                    DeviceGroup = v.Name,
-                                                    Description = v.Description,
-                                                    OsFeedType = v.OsFeedTypeStr,
-                                                    UpdatePolicy = v.UpdatePolicyStr,
-                                                    CurrentDeploymentDate = v.CurrentDeployment?.DeploymentDateUtc.ToLocalTime()
+                                                    Product = v.Name,
+                                                    Description = v.Description
                                                 };
 
-            this.gridDevices.ItemsSource = from v in devices
-                                           join dg in deviceGroups on v.DeviceGroupId equals dg.Id into gj
-                                           from dg_ in gj.DefaultIfEmpty()
-                                           join p in products on dg_?.ProductId equals p.Id into gj2
-                                           from p_ in gj2.DefaultIfEmpty()
-                                           select new DeviceModel
-                                           { 
-                                               Context = v,
-                                               Product = p_?.Name,
-                                               DeviceGroup = dg_?.Name,
-                                               ChipSku = v.ChipSkuStr,
-                                               Id = v.Id
-                                           };
+                this.gridDeviceGroups.ItemsSource = from v in deviceGroups
+                                                    join p in products on v.ProductId equals p.Id
+                                                    select new DeviceGroupModel
+                                                    {
+                                                        Context = v,
+                                                        Product = p.Name,
+                                                        DeviceGroup = v.Name,
+                                                        Description = v.Description,
+                                                        OsFeedType = v.OsFeedTypeStr,
+                                                        UpdatePolicy = v.UpdatePolicyStr,
+                                                        CurrentDeploymentDate = v.CurrentDeployment?.DeploymentDateUtc.ToLocalTime()
+                                                    };
+
+                this.gridDevices.ItemsSource = from v in devices
+                                               join dg in deviceGroups on v.DeviceGroupId equals dg.Id into gj
+                                               from dg_ in gj.DefaultIfEmpty()
+                                               join p in products on dg_?.ProductId equals p.Id into gj2
+                                               from p_ in gj2.DefaultIfEmpty()
+                                               select new DeviceModel
+                                               {
+                                                   Context = v,
+                                                   Product = p_?.Name,
+                                                   DeviceGroup = dg_?.Name,
+                                                   ChipSku = v.ChipSkuStr,
+                                                   Id = v.Id
+                                               };
+            }
+            finally
+            {
+                Cursor = null;
+            }
         }
 
         private void menuitemProductCopyId_Click(object sender, RoutedEventArgs e)
@@ -133,7 +158,16 @@ namespace AzureSphereExplorer
             var deviceGroup = model.Context;
 
             CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-            var deployments = await Api.GetDeploymentsAsync(Tenant, deviceGroup, cancellationTokenSource.Token);
+            List<AzureSphereDeployment> deployments;
+            Cursor = Cursors.Wait;
+            try
+            {
+                deployments = await Api.GetDeploymentsAsync(Tenant, deviceGroup, cancellationTokenSource.Token);
+            }
+            finally
+            {
+                Cursor = null;
+            }
 
             var dialog = new DeploymentsWindow();
             dialog.Owner = this;
@@ -178,7 +212,16 @@ namespace AzureSphereExplorer
         private async void menuitemErrorReports_Click(object sender, RoutedEventArgs e)
         {
             CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-            var deviceInsights = await Api.GetDeviceInsightsAsync(Tenant, cancellationTokenSource.Token);
+            List<AzureSphereDeviceInsight> deviceInsights;
+            Cursor = Cursors.Wait;
+            try
+            {
+                deviceInsights = await Api.GetDeviceInsightsAsync(Tenant, cancellationTokenSource.Token);
+            }
+            finally
+            {
+                Cursor = null;
+            }
 
             var dialog = new ErrorReportsWindow();
             dialog.Owner = this;
