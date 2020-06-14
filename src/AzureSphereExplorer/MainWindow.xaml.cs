@@ -229,5 +229,13 @@ namespace AzureSphereExplorer
             var dialogResult = dialog.ShowDialog();
             dialog = null;
         }
+
+        private void menuitemAbout_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new AboutWindow();
+            dialog.Owner = this;
+            var dialogResult = dialog.ShowDialog();
+            dialog = null;
+        }
     }
 }

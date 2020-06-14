@@ -35,6 +35,9 @@
             <MenuItem Header="View">
                 <MenuItem Header="Error Reports..." Click="menuitemErrorReports_Click"/>
             </MenuItem>
+            <MenuItem Header="Help">
+                <MenuItem Header="About..." Click="menuitemAbout_Click"/>
+            </MenuItem>
         </Menu>
         <Grid>
 
