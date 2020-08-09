@@ -258,6 +258,11 @@ namespace AzureSphereExplorer
 
         #endregion
 
+        private async void menuitemReload_Click(object sender, RoutedEventArgs e)
+        {
+            await RefreshAllGrids();
+        }
+            
         private async void menuitemErrorReports_Click(object sender, RoutedEventArgs e)
         {
             CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
