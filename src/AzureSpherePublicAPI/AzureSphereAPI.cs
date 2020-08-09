@@ -68,6 +68,11 @@ namespace AzureSpherePublicAPI
             return products;
         }
 
+        public async Task DeleteProductAsync(AzureSphereTenant tenant, AzureSphereProduct product, CancellationToken cancellationToken)
+        {
+            await DeleteAsync($"v2/tenants/{tenant.Id}/products/{product.Id}", cancellationToken);
+        }
+
         public async Task<List<AzureSphereDeviceGroup>> GetDeviceGroupsAsync(AzureSphereTenant tenant, CancellationToken cancellationToken)
         {
             var jsonString = await GetAsync($"v2/tenants/{tenant.Id}/devicegroups", cancellationToken);
@@ -85,7 +90,7 @@ namespace AzureSpherePublicAPI
             return deviceGroups;
         }
 
-        public async Task DeleteDeviceGroupsAsync(AzureSphereTenant tenant, AzureSphereDeviceGroup deviceGroup, CancellationToken cancellationToken)
+        public async Task DeleteDeviceGroupAsync(AzureSphereTenant tenant, AzureSphereDeviceGroup deviceGroup, CancellationToken cancellationToken)
         {
             await DeleteAsync($"v2/tenants/{tenant.Id}/devicegroups/{deviceGroup.Id}", cancellationToken);
         }

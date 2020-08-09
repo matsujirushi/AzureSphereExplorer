@@ -147,6 +147,20 @@ namespace AzureSphereExplorer
 
         #region menuitem - Product
 
+        private async void menuitemProductDelete_Click(object sender, RoutedEventArgs e)
+        {
+            var model = gridProducts.SelectedItem as ProductModel;
+            var product = model.Context;
+
+            var mboxResult = MessageBox.Show(this, $"Do you want to delete the product \"{product.Name}\"?", "Delete Product", MessageBoxButton.OKCancel, MessageBoxImage.Question);
+            if (mboxResult != MessageBoxResult.OK) return;
+
+            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+            await Api.DeleteProductAsync(Tenant, product, cancellationTokenSource.Token);
+
+            await RefreshAllGrids();
+        }
+
         private void menuitemProductCopyId_Click(object sender, RoutedEventArgs e)
         {
             var model = gridProducts.SelectedItem as ProductModel;
@@ -201,7 +215,7 @@ namespace AzureSphereExplorer
             if (mboxResult != MessageBoxResult.OK) return;
 
             CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-            await Api.DeleteDeviceGroupsAsync(Tenant, deviceGroup, cancellationTokenSource.Token);
+            await Api.DeleteDeviceGroupAsync(Tenant, deviceGroup, cancellationTokenSource.Token);
 
             await RefreshAllGrids();
         }
