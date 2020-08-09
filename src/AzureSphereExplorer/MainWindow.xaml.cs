@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -86,6 +87,14 @@ namespace AzureSphereExplorer
                 Tenant = dialog.SelectedTenant;
             }
 
+            await RefreshAllGrids();
+
+        }
+
+        private async Task RefreshAllGrids()
+        {
+            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+
             Cursor = Cursors.Wait;
             try
             {
@@ -136,6 +145,8 @@ namespace AzureSphereExplorer
             }
         }
 
+        #region menuitem - Product
+
         private void menuitemProductCopyId_Click(object sender, RoutedEventArgs e)
         {
             var model = gridProducts.SelectedItem as ProductModel;
@@ -151,6 +162,10 @@ namespace AzureSphereExplorer
 
             Clipboard.SetText($"azsphere prd show -i {product.Id}");
         }
+
+        #endregion
+
+        #region menuitem - DeviceGroup
 
         private async void menuitemDeviceGroupDeployments_Click(object sender, RoutedEventArgs e)
         {
@@ -177,6 +192,20 @@ namespace AzureSphereExplorer
             dialog = null;
         }
 
+        private async void menuitemDeviceGroupDelete_Click(object sender, RoutedEventArgs e)
+        {
+            var model = gridDeviceGroups.SelectedItem as DeviceGroupModel;
+            var deviceGroup = model.Context;
+
+            var mboxResult = MessageBox.Show(this, $"Do you want to delete the device group \"{deviceGroup.Name}\"?", "Delete Device Group", MessageBoxButton.OKCancel, MessageBoxImage.Question);
+            if (mboxResult != MessageBoxResult.OK) return;
+
+            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+            await Api.DeleteDeviceGroupsAsync(Tenant, deviceGroup, cancellationTokenSource.Token);
+
+            await RefreshAllGrids();
+        }
+
         private void menuitemDeviceGroupCopyId_Click(object sender, RoutedEventArgs e)
         {
             var model = gridDeviceGroups.SelectedItem as DeviceGroupModel;
@@ -193,6 +222,10 @@ namespace AzureSphereExplorer
             Clipboard.SetText($"azsphere dg show -i {deviceGroup.Id}");
         }
 
+        #endregion
+
+        #region menuitem - Device
+
         private void menuitemDeviceCopyId_Click(object sender, RoutedEventArgs e)
         {
             var model = gridDevices.SelectedItem as DeviceModel;
@@ -208,6 +241,8 @@ namespace AzureSphereExplorer
 
             Clipboard.SetText($"azsphere dev show -i {device.Id}");
         }
+
+        #endregion
 
         private async void menuitemErrorReports_Click(object sender, RoutedEventArgs e)
         {

@@ -4,3 +4,4 @@
 /src/*/.vs
 /src/*/bin
 /src/*/obj
+*.csproj.user

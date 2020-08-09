@@ -85,6 +85,11 @@ namespace AzureSpherePublicAPI
             return deviceGroups;
         }
 
+        public async Task DeleteDeviceGroupsAsync(AzureSphereTenant tenant, AzureSphereDeviceGroup deviceGroup, CancellationToken cancellationToken)
+        {
+            await DeleteAsync($"v2/tenants/{tenant.Id}/devicegroups/{deviceGroup.Id}", cancellationToken);
+        }
+
         public async Task<List<AzureSphereDevice>> GetDevicesAsync(AzureSphereTenant tenant, CancellationToken cancellationToken)
         {
             var jsonString = await GetAsync($"v2/tenants/{tenant.Id}/devices", cancellationToken);
@@ -159,6 +164,22 @@ namespace AzureSpherePublicAPI
                 {
                     response.EnsureSuccessStatusCode();
                     return await response.Content.ReadAsStringAsync();
+                }
+            }
+        }
+
+        internal async Task DeleteAsync(string relativeUrl, CancellationToken cancellationToken)
+        {
+            if (string.IsNullOrEmpty(AccessToken)) throw new ApplicationException();
+
+            using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AccessToken);
+
+                var uri = new Uri(AzureSphereApiEndpoint, relativeUrl);
+                using (var response = await client.DeleteAsync(new Uri(AzureSphereApiEndpoint, relativeUrl), cancellationToken))
+                {
+                    response.EnsureSuccessStatusCode();
                 }
             }
         }
