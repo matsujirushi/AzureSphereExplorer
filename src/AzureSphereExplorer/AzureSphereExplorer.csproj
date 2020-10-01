@@ -5,7 +5,7 @@
 		<TargetFrameworks>net48;netcoreapp3.1</TargetFrameworks>
 		<UseWPF>true</UseWPF>
 		<Copyright>Copyright (c) 2020 matsujirushi</Copyright>
-		<Version>0.7.0.0</Version>
+		<Version>0.8.0.0</Version>
 	</PropertyGroup>
 
 	<ItemGroup>
