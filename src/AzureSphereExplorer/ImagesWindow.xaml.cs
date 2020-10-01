@@ -35,7 +35,7 @@ namespace AzureSphereExplorer
                                                    Context = v,
                                                    Image = v.Name,
                                                    Description = v.Description,
-                                                   ImageType = v.ImageType
+                                                   Type = v.TypeStr
                                                };
         }
 

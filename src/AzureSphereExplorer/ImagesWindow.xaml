@@ -35,7 +35,7 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Image" Binding="{Binding Image}"/>
                 <DataGridTextColumn Header="Description" Binding="{Binding Description}"/>
-                <DataGridTextColumn Header="Image Type" Binding="{Binding ImageType}"/>
+                <DataGridTextColumn Header="Type" Binding="{Binding Type}"/>
             </DataGrid.Columns>
         </DataGrid>
 
