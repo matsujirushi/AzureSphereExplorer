@@ -139,16 +139,26 @@ namespace AzureSphereExplorer
         private void menuitemProductCopyId_Click(object sender, RoutedEventArgs e)
         {
             var model = gridProducts.SelectedItem as ProductModel;
-            var product = model.Context;
+            if (model == null)
+            {
+                MessageBox.Show("Product is not selected.", "Error", MessageBoxButton.OK);
+                return;
+            }
 
+            var product = model.Context;
             Clipboard.SetText(product.Id);
         }
 
         private void menuitemProductCopyShowCommand_Click(object sender, RoutedEventArgs e)
         {
             var model = gridProducts.SelectedItem as ProductModel;
-            var product = model.Context;
+            if (model == null)
+            {
+                MessageBox.Show("Product is not selected.", "Error", MessageBoxButton.OK);
+                return;
+            }
 
+            var product = model.Context;
             Clipboard.SetText($"azsphere prd show -i {product.Id}");
         }
 
@@ -227,6 +237,11 @@ namespace AzureSphereExplorer
         private void menuitemDeviceGroupCopyId_Click(object sender, RoutedEventArgs e)
         {
             var model = gridDeviceGroups.SelectedItem as DeviceGroupModel;
+            if (model == null)
+            {
+                MessageBox.Show("DeviceGroup is not selected.", "Error", MessageBoxButton.OK);
+                return;
+            }
             var deviceGroup = model.Context;
 
             Clipboard.SetText(deviceGroup.Id);
@@ -235,6 +250,11 @@ namespace AzureSphereExplorer
         private void menuitemDeviceGroupCopyShowCommand_Click(object sender, RoutedEventArgs e)
         {
             var model = gridDeviceGroups.SelectedItem as DeviceGroupModel;
+            if (model == null)
+            {
+                MessageBox.Show("DeviceGroup is not selected.", "Error", MessageBoxButton.OK);
+                return;
+            }
             var deviceGroup = model.Context;
 
             Clipboard.SetText($"azsphere dg show -i {deviceGroup.Id}");
@@ -247,6 +267,11 @@ namespace AzureSphereExplorer
         private void menuitemDeviceCopyId_Click(object sender, RoutedEventArgs e)
         {
             var model = gridDevices.SelectedItem as DeviceModel;
+            if (model == null)
+            {
+                MessageBox.Show("Device is not selected.", "Error", MessageBoxButton.OK);
+                return;
+            }
             var device = model.Context;
 
             Clipboard.SetText(device.Id);
@@ -255,6 +280,11 @@ namespace AzureSphereExplorer
         private void menuitemDeviceCopyShowCommand_Click(object sender, RoutedEventArgs e)
         {
             var model = gridDevices.SelectedItem as DeviceModel;
+            if (model == null)
+            {
+                MessageBox.Show("Device is not selected.", "Error", MessageBoxButton.OK);
+                return;
+            }
             var device = model.Context;
 
             Clipboard.SetText($"azsphere dev show -i {device.Id}");

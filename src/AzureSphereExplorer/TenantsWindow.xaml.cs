@@ -68,6 +68,11 @@ namespace AzureSphereExplorer
         private void menuitemTenantCopyId_Click(object sender, RoutedEventArgs e)
         {
             var model = gridTenants.SelectedItem as TenantModel;
+            if (model == null)
+            {
+                MessageBox.Show("Tenant is not selected.", "Error", MessageBoxButton.OK);
+                return;
+            }
             var tenant = model.Context;
 
             Clipboard.SetText(tenant.Id);
