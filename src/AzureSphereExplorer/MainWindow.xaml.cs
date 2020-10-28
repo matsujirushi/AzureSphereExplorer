@@ -102,6 +102,16 @@ namespace AzureSphereExplorer
 
         #region menuitem - Product
 
+        private void menuitemProductCreate_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new CreateProductWindow();
+            dialog.Owner = this;
+            dialog.CurrentTenantModel = this.CurrentTenantModel;
+
+            var dialogResult = dialog.ShowDialog();
+            dialog = null;
+        }
+
         private async void menuitemProductDelete_Click(object sender, RoutedEventArgs e)
         {
             var model = gridProducts.SelectedItem as ProductModel;

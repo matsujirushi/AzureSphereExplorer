@@ -325,6 +325,31 @@ namespace AzureSphereExplorer
             return Api.Username;
         }
 
+        public async Task<bool> CreateProductGroup(TenantModel tenantModel, string json)
+        {
+            bool ret = false;
+
+            try
+            {
+                HttpContent jsonContent = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
+                if (await Api.PostCreateProductGroupAsync(tenantModel.Context, jsonContent, cancellationTokenSource.Token))
+                {
+                    this.ProductModels = await GetProductsAsync(tenantModel.Context);
+                    this.DeviceGroupModels = await GetDeviceGroupsAsync(tenantModel.Context);
+
+                    NotificationChangeProduct?.Invoke(this, null);
+                    NotificationChangeDeviceGroup?.Invoke(this, null);
+                    ret = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine(ex.ToString());
+                return ret;
+            }
+            return ret;
+        }
+
         public async Task<bool> DeleteProduct(TenantModel tenantModel, ProductModel productModel)
         {
             bool ret = false;

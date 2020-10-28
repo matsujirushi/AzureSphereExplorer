@@ -110,6 +110,21 @@ namespace AzureSpherePublicAPI
             return products;
         }
 
+        public async Task<bool> PostCreateProductGroupAsync(AzureSphereTenant tenant, HttpContent jsonContent,
+            CancellationToken cancellationToken)
+        {
+            var jsonString = await MethodAsync($"v2/tenants/{tenant.Id}/products",
+                Method.POST,
+                jsonContent,
+                cancellationToken);
+
+            Console.WriteLine("PostCreateProductAsync()");
+            Console.WriteLine(jsonString);
+            var operation = new AzureSphereOperation(JObject.Parse(jsonString));
+
+            return await GetAsyncOperation(tenant, operation.OperationId, cancellationToken);
+        }
+
         public async Task<bool> DeleteProductAsync(AzureSphereTenant tenant, AzureSphereProduct product, CancellationToken cancellationToken)
         {
             var jsonString = await MethodAsync($"v2/tenants/{tenant.Id}/products/{product.Id}", Method.DELETE, null, cancellationToken);
