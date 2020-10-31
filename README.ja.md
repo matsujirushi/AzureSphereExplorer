@@ -18,6 +18,7 @@ Azure Sphereのデバイスやプロダクト、デバイスグループなど�
 ### サポートしているプラットフォーム
 
 * Microsoft Windows 10 (.NET Framework 4.8)
+* Microsoft Windows 10 (.NET Core 3.1)
 
 ## インストール方法
 
