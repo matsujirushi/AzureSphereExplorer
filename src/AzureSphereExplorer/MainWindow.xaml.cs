@@ -262,7 +262,28 @@ namespace AzureSphereExplorer
         {
             await RefreshAllGrids();
         }
-            
+
+        private async void menuitemUsers_Click(object sender, RoutedEventArgs e)
+        {
+            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+            List<AzureSphereUser> users;
+            Cursor = Cursors.Wait;
+            try
+            {
+                users = await Api.GetUsersAsync(Tenant, cancellationTokenSource.Token);
+            }
+            finally
+            {
+                Cursor = null;
+            }
+
+            var dialog = new UsersWindow();
+            dialog.Owner = this;
+            dialog.Users = users;
+            var dialogResult = dialog.ShowDialog();
+            dialog = null;
+        }
+
         private async void menuitemErrorReports_Click(object sender, RoutedEventArgs e)
         {
             CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();

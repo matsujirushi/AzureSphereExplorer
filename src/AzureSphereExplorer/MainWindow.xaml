@@ -38,6 +38,7 @@
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="View">
                 <MenuItem Header="Reload" Click="menuitemReload_Click"/>
+                <MenuItem Header="Users..." Click="menuitemUsers_Click"/>
                 <MenuItem Header="Error Reports..." Click="menuitemErrorReports_Click"/>
             </MenuItem>
             <MenuItem Header="Help">

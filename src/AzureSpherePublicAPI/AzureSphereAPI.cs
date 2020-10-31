@@ -189,5 +189,22 @@ namespace AzureSpherePublicAPI
             }
         }
 
+        public async Task<List<AzureSphereUser>> GetUsersAsync(AzureSphereTenant tenant, CancellationToken cancellationToken)
+        {
+            var jsonString = await GetAsync($"v2/tenants/{tenant.Id}/users", cancellationToken);
+            Console.WriteLine("GetUsersAsync()");
+            Console.WriteLine(jsonString);
+            var json = JToken.Parse(jsonString);
+            var jsonUsers = json.Value<JArray>("Principals");
+
+            var users = new List<AzureSphereUser>();
+            foreach (var jsonUser in jsonUsers)
+            {
+                users.Add(new AzureSphereUser(jsonUser));
+            }
+
+            return users;
+        }
+
     }
 }
