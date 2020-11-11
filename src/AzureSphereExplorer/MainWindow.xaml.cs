@@ -87,8 +87,10 @@ namespace AzureSphereExplorer
                 Tenant = dialog.SelectedTenant;
             }
 
-            await RefreshAllGrids();
+            var roles = await Api.GetRolesAsync(Tenant, Api.Username, cancellationTokenSource.Token);
+            if (roles.Contains("Administrator")) menuitemUsers.IsEnabled = true;
 
+            await RefreshAllGrids();
         }
 
         private async Task RefreshAllGrids()

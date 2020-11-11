@@ -19,6 +19,7 @@ namespace AzureSpherePublicAPI
         private static readonly Uri AzureSphereApiEndpoint = new Uri("https://prod.core.sphere.azure.net/");
 
         private string AccessToken = string.Empty;
+        public string Username { get; private set; } = string.Empty;
 
         public async Task AuthenticationAsync(CancellationToken cancellationToken)
         {
@@ -33,6 +34,7 @@ namespace AzureSpherePublicAPI
                 .ExecuteAsync();
 
             AccessToken = authResult.AccessToken;
+            Username = authResult.Account.Username;
         }
 
         public async Task<List<AzureSphereTenant>> GetTenantsAsync(CancellationToken cancellationToken)
@@ -49,6 +51,26 @@ namespace AzureSpherePublicAPI
             }
 
             return tenants;
+        }
+
+        public async Task<List<string>> GetRolesAsync(AzureSphereTenant tenant, string username, CancellationToken cancellationToken)
+        {
+            var jsonString = await GetAsync($"v2/tenants/{tenant.Id}/users/{username}/role", cancellationToken);
+            Console.WriteLine("GetRolesAsync()");
+            Console.WriteLine(jsonString);
+            var json = JToken.Parse(jsonString);
+            var jsonRoles = json.Value<JArray>("Roles");
+            if (jsonRoles.Count != 1) throw new ApplicationException();
+            if (jsonRoles[0].Value<string>("TenantId") != tenant.Id) throw new ApplicationException();
+            var jsonRoleNames = jsonRoles[0]["RoleNames"];
+
+            var roleNames = new List<string>();
+            foreach (var jsonRoleName in jsonRoleNames)
+            {
+                roleNames.Add(jsonRoleName.Value<string>());
+            }
+
+            return roleNames;
         }
 
         public async Task<List<AzureSphereProduct>> GetProductsAsync(AzureSphereTenant tenant, CancellationToken cancellationToken)
