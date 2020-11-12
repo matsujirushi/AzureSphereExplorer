@@ -391,6 +391,27 @@ namespace AzureSphereExplorer
             return this.DeviceGroupModels;
         }
 
+        public async Task<bool> CreateDeviceGroup(TenantModel tenantModel, string json)
+        {
+            bool ret = false;
+            try
+            {
+                HttpContent jsonContent = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
+                if (await Api.PostCreateDeviceGroupAsync(tenantModel.Context, jsonContent, cancellationTokenSource.Token))
+                {
+                    this.DeviceGroupModels = await GetDeviceGroupsAsync(tenantModel.Context);
+                    NotificationChangeDeviceGroup?.Invoke(this, null);
+                    ret = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine(ex.ToString());
+                return ret;
+            }
+            return ret;
+        }
+
         public async Task<bool> DeleteDeviceGroup(TenantModel tenantModel, DeviceGroupModel deviceGroupModel)
         {
             bool ret = false;

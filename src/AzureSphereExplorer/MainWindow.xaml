@@ -25,6 +25,7 @@
         <ContextMenu x:Key="menuDeviceGroup">
             <MenuItem Header="Deployments..." Click="menuitemDeviceGroupDeployments_Click"/>
             <Separator/>
+            <MenuItem Header="Create New DeviceGroup" Click="menuitemDeviceGroupCreate_Click"/>
             <MenuItem Header="Delete" Click="menuitemDeviceGroupDelete_Click"/>
             <Separator/>
             <MenuItem Header="Copy ID to clipboard" Click="menuitemDeviceGroupCopyId_Click"/>

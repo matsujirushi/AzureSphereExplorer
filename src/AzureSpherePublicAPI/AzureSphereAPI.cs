@@ -153,6 +153,19 @@ namespace AzureSpherePublicAPI
 
             return deviceGroups;
         }
+        public async Task<bool> PostCreateDeviceGroupAsync(AzureSphereTenant tenant, HttpContent jsonContent,
+            CancellationToken cancellationToken)
+        {
+            var jsonString = await MethodAsync($"v2/tenants/{tenant.Id}/devicegroups",
+                Method.POST,
+                jsonContent,
+                cancellationToken);
+
+            Console.WriteLine("PostCreateDeviceGroupAsync()");
+            Console.WriteLine(jsonString);
+
+            return true;
+        }
 
         public async Task<bool> DeleteDeviceGroupAsync(AzureSphereTenant tenant, AzureSphereDeviceGroup deviceGroup, CancellationToken cancellationToken)
         {

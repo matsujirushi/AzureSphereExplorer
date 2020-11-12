@@ -176,6 +176,21 @@ namespace AzureSphereExplorer
 
         #region menuitem - DeviceGroup
 
+        private void menuitemDeviceGroupCreate_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.gridProducts.Items.Count <= 0)
+            {
+                MessageBox.Show("Product is not exists","Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            var dialog = new CreateDeviceGroupWindow();
+            dialog.Owner = this;
+            dialog.CurrentTenantModel = this.CurrentTenantModel;
+
+            var dialogResult = dialog.ShowDialog();
+            dialog = null;
+        }
+
         private async void menuitemDeviceGroupDeployments_Click(object sender, RoutedEventArgs e)
         {
             var model = gridDeviceGroups.SelectedItem as DeviceGroupModel;
