@@ -25,6 +25,7 @@ namespace AzureSphereExplorer
         private List<UserModel> UsersModels;
         public event EventHandler<EventArgs> NotificationChangeProduct;
         public event EventHandler<EventArgs> NotificationChangeDeviceGroup;
+        public event EventHandler<EventArgs> NotificationChangeDevice;
 
         private static ModelManager Instatnce = new ModelManager();
 
@@ -449,6 +450,41 @@ namespace AzureSphereExplorer
                 return null;
             }
             return this.DeviceModels;
+        }
+
+        public async Task<bool> ChangeDeviceGroup(TenantModel tenantModel, DeviceGroupModel targetDeviceGroup, List<DeviceModel> deviceModels, string json)
+        {
+            bool ret = false;
+            bool changed = false;
+            try
+            {
+                foreach (DeviceModel deviceModel in deviceModels)
+                {
+                    HttpContent jsonContent = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
+                    if (await Api.PutChangeDeviceGroupAsync(tenantModel.Context, deviceModel.Id, jsonContent, cancellationTokenSource.Token))
+                    {
+                        int i = this.DeviceModels.IndexOf(deviceModel);
+                        deviceModel.Product = targetDeviceGroup.Product;
+                        deviceModel.DeviceGroup = targetDeviceGroup.DeviceGroup;
+                        this.DeviceModels.RemoveAt(i);
+                        this.DeviceModels.Insert(i, deviceModel);
+                        changed = true;
+                    }
+                }
+                ret = true;
+
+                if (changed)
+                {
+                    NotificationChangeDevice?.Invoke(this, null);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine(ex.ToString());
+                return ret;
+            }
+            return ret;
         }
 
         // Deployment list

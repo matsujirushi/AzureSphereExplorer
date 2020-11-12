@@ -29,7 +29,7 @@ namespace AzureSpherePublicAPI
 
         internal AzureSphereDevice(JToken json)
         {
-            Id = json.Value<string>("DeviceId");
+            Id = json.Value<string>("DeviceId").ToLower();
             DeviceGroupId = json.Value<string>("DeviceGroupId");
             ChipSku = json.Value<int>("ChipSku");
         }

@@ -197,6 +197,21 @@ namespace AzureSpherePublicAPI
             return devices;
         }
 
+        public async Task<bool> PutChangeDeviceGroupAsync(AzureSphereTenant tenant, string deviceId, HttpContent jsonContent,
+            CancellationToken cancellationToken)
+        {
+            var jsonString = await MethodAsync($"v2/tenants/{tenant.Id}/devices/{deviceId}/devicegroup",
+                Method.PUT,
+                jsonContent,
+                cancellationToken);
+
+            Console.WriteLine("PutChangeDeviceGroupAsync()");
+            Console.WriteLine(jsonString);
+            var operation = new AzureSphereOperation(JObject.Parse(jsonString));
+
+            return await GetAsyncOperation(tenant, operation.OperationId, cancellationToken);
+        }
+
         public async Task<List<AzureSphereDeployment>> GetDeploymentsAsync(AzureSphereTenant tenant, AzureSphereDeviceGroup deviceGroup, CancellationToken cancellationToken)
         {
             var jsonString = await MethodAsync($"v2/tenants/{tenant.Id}/devicegroups/{deviceGroup.Id}/deployments",

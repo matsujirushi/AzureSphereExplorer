@@ -72,6 +72,7 @@ namespace AzureSphereExplorer
 
             modelMgr.NotificationChangeProduct += NotificationChangeProduct;
             modelMgr.NotificationChangeDeviceGroup += NotificationChangeDeviceGroup;
+            modelMgr.NotificationChangeDevice += NotificationChangeDevice;
 
             await RefreshAllGrids();
         }
@@ -289,6 +290,29 @@ namespace AzureSphereExplorer
 
         #region menuitem - Device
 
+        private void menuitemDeviceChangeDeviceGroup_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.gridDevices.Items.Count <= 0)
+            {
+                MessageBox.Show("Device is not exists", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            if (this.gridDeviceGroups.Items.Count <= 0)
+            {
+                MessageBox.Show("DeviceGroup is not exists", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            var dialog = new ChangeDeviceGroupWindow();
+            dialog.Owner = this;
+            dialog.CurrentTenantModel = this.CurrentTenantModel;
+
+            dialog.CurrDevice = this.gridDevices.SelectedItem as DeviceModel;
+            var dialogResult = dialog.ShowDialog();
+            dialog = null;
+        }
+
         private void menuitemDeviceCopyId_Click(object sender, RoutedEventArgs e)
         {
             var model = gridDevices.SelectedItem as DeviceModel;
@@ -396,6 +420,16 @@ namespace AzureSphereExplorer
 
             this.gridDeviceGroups.ItemsSource = deviceGroupModel;
             this.gridDeviceGroups.Items.Refresh();
+        }
+        private async void NotificationChangeDevice(object sender, EventArgs e)
+        {
+            ModelManager modelMgr = ModelManager.GetInstance();
+
+            Console.Write("called NotificationChangeDevice()");
+            List<DeviceModel> deviceModels = await modelMgr.GetDeviceModels(CurrentTenantModel, false);
+
+            this.gridDevices.ItemsSource = deviceModels;
+            this.gridDevices.Items.Refresh();
         }
     }
 }

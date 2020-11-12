@@ -32,6 +32,8 @@
             <MenuItem Header="Copy show command to clipboard" Click="menuitemDeviceGroupCopyShowCommand_Click"/>
         </ContextMenu>
         <ContextMenu x:Key="menuDevice">
+            <MenuItem Header="Change DeviceGroup" Click="menuitemDeviceChangeDeviceGroup_Click"/>
+            <Separator/>
             <MenuItem Header="Copy ID to clipboard" Click="menuitemDeviceCopyId_Click"/>
             <MenuItem Header="Copy show command to clipboard" Click="menuitemDeviceCopyShowCommand_Click"/>
         </ContextMenu>
