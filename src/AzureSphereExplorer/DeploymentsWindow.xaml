@@ -38,6 +38,7 @@
         </DataGrid>
 
         <StackPanel Grid.Column="1" Orientation="Vertical">
+            <Button Width="100" Height="30" Margin="5" Content="Upload" Click="Upload_Click" IsDefault="True"/>
             <Button Width="100" Height="30" Margin="5" Content="Close" Click="Close_Click" IsDefault="True"/>
         </StackPanel>
 

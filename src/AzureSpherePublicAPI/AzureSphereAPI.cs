@@ -260,6 +260,36 @@ namespace AzureSpherePublicAPI
             return deviceInsights;
         }
 
+        public async Task<bool> PostImageUploadAsync(AzureSphereTenant tenant, HttpContent jsonContent,
+            CancellationToken cancellationToken)
+        {
+            var jsonString = await MethodAsync($"v2/tenants/{tenant.Id}/images",
+                Method.POST,
+                jsonContent,
+                cancellationToken);
+
+            Console.WriteLine("PostImageUploadAsync()");
+            Console.WriteLine(jsonString);
+            var operation = new AzureSphereOperation(JObject.Parse(jsonString));
+
+            return await GetAsyncOperation(tenant, operation.OperationId, cancellationToken);
+        }
+
+        public async Task<bool> PostDeployAsync(AzureSphereTenant tenant, AzureSphereDeviceGroup deviceGroup, HttpContent jsonContent,
+            CancellationToken cancellationToken)
+        {
+            var jsonString = await MethodAsync($"v2/tenants/{tenant.Id}/devicegroups/{deviceGroup.Id}/deployments",
+                Method.POST,
+                jsonContent,
+                cancellationToken);
+
+            Console.WriteLine("PostDeployAsync()");
+            Console.WriteLine(jsonString);
+            var operation = new AzureSphereOperation(JObject.Parse(jsonString));
+
+            return await GetAsyncOperation(tenant, operation.OperationId, cancellationToken);
+        }
+
         private async Task<bool> GetAsyncOperation(AzureSphereTenant tenant, string operationId, CancellationToken cancellationToken)
         {
             bool continueOperationAsync = true;

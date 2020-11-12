@@ -26,6 +26,7 @@ namespace AzureSphereExplorer
         public event EventHandler<EventArgs> NotificationChangeProduct;
         public event EventHandler<EventArgs> NotificationChangeDeviceGroup;
         public event EventHandler<EventArgs> NotificationChangeDevice;
+        public event EventHandler<EventArgs> NotificationChangeDeployment;
 
         private static ModelManager Instatnce = new ModelManager();
 
@@ -528,7 +529,6 @@ namespace AzureSphereExplorer
             return this.DeviceInsightModels;
 
         }
-
         // Users list
         public async Task<List<UserModel>> GetUsersModels(TenantModel tenantModel)
         {
@@ -547,8 +547,6 @@ namespace AzureSphereExplorer
             return this.UsersModels;
 
         }
-
-
         // Image list
         public async Task<List<ImageModel>> GetImageModels(TenantModel tenantModel, DeploymentModel deploymentModel)
         {
@@ -565,5 +563,47 @@ namespace AzureSphereExplorer
             return imageModels;
 
         }
+
+        public async Task<bool> ImageUpload(TenantModel tenantModel, byte[] bytes)
+        {
+            bool ret = false;
+            try
+            {
+                HttpContent jsonContent = new ByteArrayContent(bytes);
+                if (await Api.PostImageUploadAsync(tenantModel.Context, jsonContent, cancellationTokenSource.Token))
+                {
+                    ret = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine(ex.ToString());
+                return ret;
+            }
+            return ret;
+        }
+
+        public async Task<bool> Deployment(TenantModel tenantModel, DeviceGroupModel deviceGroupModel, string json)
+        {
+            bool ret = false;
+            try
+            {
+                HttpContent jsonContent = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
+                if (await Api.PostDeployAsync(tenantModel.Context, deviceGroupModel.Context, jsonContent, cancellationTokenSource.Token))
+                {
+                    this.DeviceGroupModels = await GetDeviceGroupsAsync(tenantModel.Context);
+                    NotificationChangeDeviceGroup?.Invoke(this, null);
+                    NotificationChangeDeployment?.Invoke(this, null);
+                    ret = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine(ex.ToString());
+                return ret;
+            }
+            return ret;
+        }
+
     }
 }

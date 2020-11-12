@@ -45,6 +45,32 @@ namespace AzureSphereExplorer
             this.DialogResult = true;
         }
 
+        private void Upload_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new UploadImageWindow();
+            ModelManager modelManager = ModelManager.GetInstance();
+            modelManager.NotificationChangeDeployment += NotificationChangeDeployment;
+
+            dialog.Owner = this;
+            dialog.Title += $" - {SelectDeviceGroupModel.DeviceGroup}";
+            var dialogResult = dialog.ShowDialog();
+            dialog = null;
+        }
+
+        private async void NotificationChangeDeployment(object sender, EventArgs e)
+        {
+            ModelManager modelMgr = ModelManager.GetInstance();
+
+            Console.Write("called NotificationChangeDeployment()");
+
+            List<DeploymentModel> deploymentModels = await modelMgr.GetDeploymentModels(CurrentTenantModel, this.SelectDeviceGroupModel);
+
+            this.gridDeployments.ItemsSource = deploymentModels;
+            var viewDeployments = CollectionViewSource.GetDefaultView(this.gridDeployments.ItemsSource);
+            this.gridDeployments.Columns[0].SortDirection = ListSortDirection.Descending;
+            viewDeployments.SortDescriptions.Add(new SortDescription("CurrentDeploymentDate", ListSortDirection.Descending));
+            this.gridDeployments.Items.Refresh();
+        }
         private async void menuitemImages_Click(object sender, RoutedEventArgs e)
         {
             var model = gridDeployments.SelectedItem as DeploymentModel;
