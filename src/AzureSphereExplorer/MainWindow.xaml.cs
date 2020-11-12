@@ -400,6 +400,34 @@ namespace AzureSphereExplorer
             dialog = null;
         }
 
+        private void menuitemProductExtract_Click(object sender, RoutedEventArgs e)
+        {
+            ProductModel currProduct = this.gridProducts.SelectedItem as ProductModel;
+
+            var dialog = new ExtractWindow();
+            dialog.Owner = this;
+            dialog.CurrTenant = this.CurrentTenantModel;
+            dialog.CurrProduct = currProduct;
+            dialog.CurrDeviceGroup = null;
+
+            var dialogResult = dialog.ShowDialog();
+            dialog = null;
+        }
+
+        private void menuitemDeviceGroupExtract_Click(object sender, RoutedEventArgs e)
+        {
+            DeviceGroupModel currDeviceGroup = this.gridDeviceGroups.SelectedItem as DeviceGroupModel;
+
+            var dialog = new ExtractWindow();
+            dialog.Owner = this;
+            dialog.CurrTenant = this.CurrentTenantModel;
+            dialog.CurrProduct = null;
+            dialog.CurrDeviceGroup = currDeviceGroup;
+
+            var dialogResult = dialog.ShowDialog();
+            dialog = null;
+        }
+
         private async void NotificationChangeProduct(object sender, EventArgs e)
         {
             ModelManager modelMgr = ModelManager.GetInstance();

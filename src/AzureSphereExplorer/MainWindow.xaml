@@ -16,6 +16,7 @@
         Title="Azure Sphere Explorer" Height="600" Width="1024" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <ContextMenu x:Key="menuProduct">
+            <MenuItem Header="Extract Devices from Product" Click="menuitemProductExtract_Click"/>
             <MenuItem Header="Create New Product" Click="menuitemProductCreate_Click"/>
             <MenuItem Header="Delete" Click="menuitemProductDelete_Click"/>
             <Separator/>
@@ -23,6 +24,7 @@
             <MenuItem Header="Copy show command to clipboard" Click="menuitemProductCopyShowCommand_Click"/>
         </ContextMenu>
         <ContextMenu x:Key="menuDeviceGroup">
+            <MenuItem Header="Extract Devices from DeviceGroup" Click="menuitemDeviceGroupExtract_Click"/>
             <MenuItem Header="Deployments..." Click="menuitemDeviceGroupDeployments_Click"/>
             <Separator/>
             <MenuItem Header="Create New DeviceGroup" Click="menuitemDeviceGroupCreate_Click"/>

@@ -1,0 +1,107 @@
+﻿<Window x:Class="AzureSphereExplorer.ExtractWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AzureSphereExplorer"
+        mc:Ignorable="d"
+        Title="ExtractWindow" Height="450" Width="900" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen">
+
+    <Window.Resources>
+        <ContextMenu x:Key="menuDeviceGroup" IsEnabled="false" Height="0" Width="0">
+            <MenuItem Header="Deployments..." IsEnabled="false" Click="menuitemDeviceGroupDeployments_Click"/>
+        </ContextMenu>
+        <ContextMenu x:Key="menuDevice" IsEnabled="false" Height="0" Width="0">
+            <MenuItem Header="Change DeviceGroup" IsEnabled="false" Click="menuitemDeviceChangeDeviceGroup_Click"/>
+        </ContextMenu>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+            <TextBlock Style="{DynamicResource MaterialDesignCaptionTextBlock}" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}" Background="{DynamicResource PrimaryHueLightBrush}">
+                        Products
+                </TextBlock>
+                <DataGrid Grid.Row="1"
+                              x:Name="gridProducts"
+                              IsReadOnly="True"
+                              SelectionMode="Single"
+                              AutoGenerateColumns="False"
+                              SelectedCellsChanged="gridProducts_SelectedCellsChanged"
+                              >
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Product" Binding="{Binding Product}"/>
+                        <DataGridTextColumn Header="Description" Binding="{Binding Description}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+
+            <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch"/>
+
+            <Grid Grid.Column="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Style="{DynamicResource MaterialDesignCaptionTextBlock}" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}" Background="{DynamicResource PrimaryHueLightBrush}">
+                        Device Groups
+                    </TextBlock>
+                    <DataGrid Grid.Row="1"
+                              x:Name="gridDeviceGroups"
+                              IsReadOnly="True"
+                              SelectionMode="Single"
+                              AutoGenerateColumns="False"
+                              SelectedCellsChanged="gridDeviceGroups_SelectedCellsChanged"
+                              ContextMenu="{DynamicResource menuDeviceGroup}"
+                              >
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Product" Binding="{Binding Product}"/>
+                            <DataGridTextColumn Header="Device Group" Binding="{Binding DeviceGroup}"/>
+                            <DataGridTextColumn Header="Description" Binding="{Binding Description}"/>
+                            <DataGridTextColumn Header="Os Feed Type" Binding="{Binding OsFeedType}"/>
+                            <DataGridTextColumn Header="Update Policy" Binding="{Binding UpdatePolicy}"/>
+                            <DataGridTextColumn Header="Current Deployment Date" Binding="{Binding CurrentDeploymentDate}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+
+
+            <GridSplitter Grid.Column="3" Width="5" HorizontalAlignment="Stretch"/>
+
+        <Grid Grid.Column="4">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <TextBlock Style="{DynamicResource MaterialDesignCaptionTextBlock}" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}" Background="{DynamicResource PrimaryHueLightBrush}">
+                    Devices
+            </TextBlock>
+            <DataGrid Grid.Row="1"
+                      x:Name="gridDevices"
+                      IsReadOnly="True"
+                      SelectionMode="Single"
+                      AutoGenerateColumns="False"
+                      ContextMenu="{DynamicResource menuDevice}"
+                >
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Product" Binding="{Binding Product}"/>
+                    <DataGridTextColumn Header="Device Group" Binding="{Binding DeviceGroup}"/>
+                    <DataGridTextColumn Header="Chip SKU" Binding="{Binding ChipSku}"/>
+                    <DataGridTextColumn Header="ID" Binding="{Binding Id}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+    </Grid>
+</Window>
