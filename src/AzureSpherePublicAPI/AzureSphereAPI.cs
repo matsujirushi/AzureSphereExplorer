@@ -21,6 +21,23 @@ namespace AzureSpherePublicAPI
         private string AccessToken = string.Empty;
         public string Username { get; private set; } = string.Empty;
 
+        public enum Method
+        {
+            GET,
+            PUT,
+            POST,
+            DELETE
+        };
+
+        public enum StateNum
+        {
+            NotStarted,
+            InProgress,
+            Complete,
+            Failed
+        };
+
+
         public async Task AuthenticationAsync(CancellationToken cancellationToken)
         {
             var publicClientApp = PublicClientApplicationBuilder
@@ -39,7 +56,8 @@ namespace AzureSpherePublicAPI
 
         public async Task<List<AzureSphereTenant>> GetTenantsAsync(CancellationToken cancellationToken)
         {
-            var jsonString = await GetAsync("v2/tenants", cancellationToken);
+            var jsonString = await MethodAsync("v2/tenants", Method.GET, null, cancellationToken);
+
             Console.WriteLine("GetTenantsAsync()");
             Console.WriteLine(jsonString);
             var jsonTenants = JArray.Parse(jsonString);
@@ -55,7 +73,8 @@ namespace AzureSpherePublicAPI
 
         public async Task<List<string>> GetRolesAsync(AzureSphereTenant tenant, string username, CancellationToken cancellationToken)
         {
-            var jsonString = await GetAsync($"v2/tenants/{tenant.Id}/users/{username}/role", cancellationToken);
+            var jsonString = await MethodAsync($"v2/tenants/{tenant.Id}/users/{username}/role", Method.GET, null, cancellationToken);
+
             Console.WriteLine("GetRolesAsync()");
             Console.WriteLine(jsonString);
             var json = JToken.Parse(jsonString);
@@ -75,7 +94,8 @@ namespace AzureSpherePublicAPI
 
         public async Task<List<AzureSphereProduct>> GetProductsAsync(AzureSphereTenant tenant, CancellationToken cancellationToken)
         {
-            var jsonString = await GetAsync($"v2/tenants/{tenant.Id}/products", cancellationToken);
+            var jsonString = await MethodAsync($"v2/tenants/{tenant.Id}/products", Method.GET, null, cancellationToken);
+
             Console.WriteLine("GetProductsAsync()");
             Console.WriteLine(jsonString);
             var json = JToken.Parse(jsonString);
@@ -90,14 +110,21 @@ namespace AzureSpherePublicAPI
             return products;
         }
 
-        public async Task DeleteProductAsync(AzureSphereTenant tenant, AzureSphereProduct product, CancellationToken cancellationToken)
+        public async Task<bool> DeleteProductAsync(AzureSphereTenant tenant, AzureSphereProduct product, CancellationToken cancellationToken)
         {
-            await DeleteAsync($"v2/tenants/{tenant.Id}/products/{product.Id}", cancellationToken);
+            var jsonString = await MethodAsync($"v2/tenants/{tenant.Id}/products/{product.Id}", Method.DELETE, null, cancellationToken);
+
+            Console.WriteLine("DeleteProductAsync()");
+            Console.WriteLine(jsonString);
+            var operation = new AzureSphereOperation(JObject.Parse(jsonString));
+
+            return await GetAsyncOperation(tenant, operation.OperationId, cancellationToken);
         }
 
         public async Task<List<AzureSphereDeviceGroup>> GetDeviceGroupsAsync(AzureSphereTenant tenant, CancellationToken cancellationToken)
         {
-            var jsonString = await GetAsync($"v2/tenants/{tenant.Id}/devicegroups", cancellationToken);
+            var jsonString = await MethodAsync($"v2/tenants/{tenant.Id}/devicegroups", Method.GET, null, cancellationToken);
+
             Console.WriteLine("GetDeviceGroupsAsync()");
             Console.WriteLine(jsonString);
             var json = JToken.Parse(jsonString);
@@ -112,14 +139,22 @@ namespace AzureSpherePublicAPI
             return deviceGroups;
         }
 
-        public async Task DeleteDeviceGroupAsync(AzureSphereTenant tenant, AzureSphereDeviceGroup deviceGroup, CancellationToken cancellationToken)
+        public async Task<bool> DeleteDeviceGroupAsync(AzureSphereTenant tenant, AzureSphereDeviceGroup deviceGroup, CancellationToken cancellationToken)
         {
-            await DeleteAsync($"v2/tenants/{tenant.Id}/devicegroups/{deviceGroup.Id}", cancellationToken);
+            var jsonString = await MethodAsync($"v2/tenants/{tenant.Id}/devicegroups/{deviceGroup.Id}", Method.DELETE, null, cancellationToken);
+
+            Console.WriteLine("DeleteDeviceGroupAsync()");
+            Console.WriteLine(jsonString);
+            var operation = new AzureSphereOperation(JObject.Parse(jsonString));
+
+            return await GetAsyncOperation(tenant, operation.OperationId, cancellationToken);
+
         }
 
         public async Task<List<AzureSphereDevice>> GetDevicesAsync(AzureSphereTenant tenant, CancellationToken cancellationToken)
         {
-            var jsonString = await GetAsync($"v2/tenants/{tenant.Id}/devices", cancellationToken);
+            var jsonString = await MethodAsync($"v2/tenants/{tenant.Id}/devices", Method.GET, null, cancellationToken);
+
             Console.WriteLine("GetDevicesAsync()");
             Console.WriteLine(jsonString);
             var json = JToken.Parse(jsonString);
@@ -136,7 +171,9 @@ namespace AzureSpherePublicAPI
 
         public async Task<List<AzureSphereDeployment>> GetDeploymentsAsync(AzureSphereTenant tenant, AzureSphereDeviceGroup deviceGroup, CancellationToken cancellationToken)
         {
-            var jsonString = await GetAsync($"v2/tenants/{tenant.Id}/devicegroups/{deviceGroup.Id}/deployments", cancellationToken);
+            var jsonString = await MethodAsync($"v2/tenants/{tenant.Id}/devicegroups/{deviceGroup.Id}/deployments",
+                                Method.GET, null, cancellationToken);
+
             Console.WriteLine("GetDeploymentsAsync()");
             Console.WriteLine(jsonString);
             var json = JToken.Parse(jsonString);
@@ -153,7 +190,8 @@ namespace AzureSpherePublicAPI
 
         public async Task<AzureSphereImage> GetImageAsync(AzureSphereTenant tenant, string imageId, CancellationToken cancellationToken)
         {
-            var jsonString = await GetAsync($"v2/tenants/{tenant.Id}/images/{imageId}/metadata", cancellationToken);
+            var jsonString = await MethodAsync($"v2/tenants/{tenant.Id}/images/{imageId}/metadata", Method.GET, null, cancellationToken);
+
             Console.WriteLine("GetImageAsync()");
             Console.WriteLine(jsonString);
             var json = JToken.Parse(jsonString);
@@ -163,7 +201,8 @@ namespace AzureSpherePublicAPI
 
         public async Task<List<AzureSphereDeviceInsight>> GetDeviceInsightsAsync(AzureSphereTenant tenant, CancellationToken cancellationToken)
         {
-            var jsonString = await GetAsync($"v2/tenants/{tenant.Id}/getDeviceInsights", cancellationToken);
+            var jsonString = await MethodAsync($"v2/tenants/{tenant.Id}/getDeviceInsights", Method.GET, null, cancellationToken);
+
             Console.WriteLine("GetDeviceInsightsAsync()");
             Console.WriteLine(jsonString);
             var json = JToken.Parse(jsonString);
@@ -178,42 +217,42 @@ namespace AzureSpherePublicAPI
             return deviceInsights;
         }
 
-        internal async Task<string> GetAsync(string relativeUrl, CancellationToken cancellationToken)
+        private async Task<bool> GetAsyncOperation(AzureSphereTenant tenant, string operationId, CancellationToken cancellationToken)
         {
-            if (string.IsNullOrEmpty(AccessToken)) throw new ApplicationException();
-
-            using (var client = new HttpClient())
+            bool continueOperationAsync = true;
+            bool ret = false;
+            while (continueOperationAsync)
             {
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AccessToken);
+                var jsonString = await MethodAsync($"v2/tenants/{tenant.Id}/operations/{operationId}",
+                    Method.GET,
+                    null,
+                    cancellationToken);
 
-                var uri = new Uri(AzureSphereApiEndpoint, relativeUrl);
-                using (var response = await client.GetAsync(new Uri(AzureSphereApiEndpoint, relativeUrl), cancellationToken))
+                Console.WriteLine("GetAsyncOperation()");
+                Console.WriteLine(jsonString);
+                var operation = new AzureSphereOperation(JObject.Parse(jsonString));
+                StateNum state = (StateNum)operation.State;
+
+                switch (state)
                 {
-                    response.EnsureSuccessStatusCode();
-                    return await response.Content.ReadAsStringAsync();
+                    case StateNum.Complete:
+                        ret = true;
+                        continueOperationAsync = false;
+                        break;
+                    case StateNum.Failed:
+                        ret = false;
+                        continueOperationAsync = false;
+                        break;
+                    default:
+                        break;
                 }
             }
-        }
-
-        internal async Task DeleteAsync(string relativeUrl, CancellationToken cancellationToken)
-        {
-            if (string.IsNullOrEmpty(AccessToken)) throw new ApplicationException();
-
-            using (var client = new HttpClient())
-            {
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AccessToken);
-
-                var uri = new Uri(AzureSphereApiEndpoint, relativeUrl);
-                using (var response = await client.DeleteAsync(new Uri(AzureSphereApiEndpoint, relativeUrl), cancellationToken))
-                {
-                    response.EnsureSuccessStatusCode();
-                }
-            }
+            return ret;
         }
 
         public async Task<List<AzureSphereUser>> GetUsersAsync(AzureSphereTenant tenant, CancellationToken cancellationToken)
         {
-            var jsonString = await GetAsync($"v2/tenants/{tenant.Id}/users", cancellationToken);
+            var jsonString = await MethodAsync($"v2/tenants/{tenant.Id}/users", Method.GET, null, cancellationToken);
             Console.WriteLine("GetUsersAsync()");
             Console.WriteLine(jsonString);
             var json = JToken.Parse(jsonString);
@@ -228,5 +267,38 @@ namespace AzureSpherePublicAPI
             return users;
         }
 
+        private async Task<string> MethodAsync(string relativeUrl, Method method, HttpContent content, CancellationToken cancellationToken)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AccessToken);
+                Uri uri = new Uri(AzureSphereApiEndpoint, relativeUrl);
+
+                Task<HttpResponseMessage> responseTask;
+
+                switch (method)
+                {
+                    case Method.GET:
+                    default:
+                        responseTask = client.GetAsync(uri, cancellationToken);
+                        break;
+                    case Method.PUT:
+                        responseTask = client.PutAsync(uri, content, cancellationToken);
+                        break;
+                    case Method.POST:
+                        responseTask = client.PostAsync(uri, content, cancellationToken);
+                        break;
+                    case Method.DELETE:
+                        responseTask = client.DeleteAsync(uri, cancellationToken);
+                        break;
+                }
+
+                using (HttpResponseMessage response = await responseTask)
+                {
+                    response.EnsureSuccessStatusCode();
+                    return await response.Content.ReadAsStringAsync();
+                }
+            }
+        }
     }
 }

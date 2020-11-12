@@ -22,9 +22,9 @@ namespace AzureSphereExplorer
     /// </summary>
     public partial class DeploymentsWindow : Window
     {
-        public List<AzureSphereDeployment> Deployments { get; set; }
-
-        private MainWindow _ParentWindow { get { return (MainWindow)this.Owner; } }
+        internal TenantModel CurrentTenantModel;
+        internal List<DeploymentModel> DeploymentModels;
+        internal DeviceGroupModel SelectDeviceGroupModel;
 
         public DeploymentsWindow()
         {
@@ -33,13 +33,8 @@ namespace AzureSphereExplorer
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            this.gridDeployments.ItemsSource = from v in Deployments
-                                               select new DeploymentModel
-                                               {
-                                                   Context = v,
-                                                   CurrentDeploymentDate = v.DeploymentDateUtc.ToLocalTime(),
-                                                   NumberOfImages = v.DeployedImages.Count
-                                               };
+            this.gridDeployments.ItemsSource = DeploymentModels;
+
             var viewDeployments = CollectionViewSource.GetDefaultView(this.gridDeployments.ItemsSource);
             this.gridDeployments.Columns[0].SortDirection = ListSortDirection.Descending;
             viewDeployments.SortDescriptions.Add(new SortDescription("CurrentDeploymentDate", ListSortDirection.Descending));
@@ -53,17 +48,14 @@ namespace AzureSphereExplorer
         private async void menuitemImages_Click(object sender, RoutedEventArgs e)
         {
             var model = gridDeployments.SelectedItem as DeploymentModel;
-            var deployment = model.Context;
+            var imageModels = new List<ImageModel>();
 
-            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-            var images = new List<AzureSphereImage>();
             Cursor = Cursors.Wait;
+
             try
             {
-                foreach (var imageId in deployment.DeployedImages)
-                {
-                    images.Add(await _ParentWindow.Api.GetImageAsync(_ParentWindow.Tenant, imageId, cancellationTokenSource.Token));
-                }
+                ModelManager modelManager = ModelManager.GetInstance();
+                imageModels = await modelManager.GetImageModels(this.CurrentTenantModel, model);
             }
             finally
             {
@@ -72,7 +64,8 @@ namespace AzureSphereExplorer
 
             var dialog = new ImagesWindow();
             dialog.Owner = this;
-            dialog.Images = images;
+            dialog.imageModels = imageModels;
+
             var dialogResult = dialog.ShowDialog();
             dialog = null;
         }

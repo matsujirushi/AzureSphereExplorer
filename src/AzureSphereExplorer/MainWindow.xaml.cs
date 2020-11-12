@@ -22,8 +22,7 @@ namespace AzureSphereExplorer
     /// </summary>
     public partial class MainWindow : Window
     {
-        internal AzureSphereAPI Api = new AzureSphereAPI();
-        internal AzureSphereTenant Tenant;
+        internal TenantModel CurrentTenantModel;
 
         public MainWindow()
         {
@@ -32,114 +31,68 @@ namespace AzureSphereExplorer
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-
-            try
-            {
-                Cursor = Cursors.Wait;
-                try
-                {
-                    await Api.AuthenticationAsync(cancellationTokenSource.Token);
-                }
-                finally
-                {
-                    Cursor = null;
-                }
-            }
-            catch (Exception)
+            ModelManager modelMgr = ModelManager.GetInstance();
+            if (!await modelMgr.Initialize())
             {
                 MessageBox.Show("Failed to authenticate.", null, MessageBoxButton.OK, MessageBoxImage.Error);
                 Close();
                 return;
             }
 
-            List<AzureSphereTenant> tenants;
-            Cursor = Cursors.Wait;
-            try
-            {
-                tenants = await Api.GetTenantsAsync(cancellationTokenSource.Token);
-            }
-            finally
-            {
-                Cursor = null;
-            }
-            if (tenants.Count <= 0)
+            List<TenantModel> tenantModels = await modelMgr.GetTenantModels();
+
+            if (tenantModels.Count <= 0)
             {
                 MessageBox.Show("No azure sphere tenant found.", null, MessageBoxButton.OK, MessageBoxImage.Error);
                 Close();
                 return;
             }
-            else if (tenants.Count == 1)
+            else if (tenantModels.Count == 1)
             {
-                Tenant = tenants[0];
+                CurrentTenantModel = tenantModels[0];
             }
             else
             {
                 var dialog = new TenantsWindow();
                 dialog.Owner = this;
-                dialog.Tenants = tenants;
+                dialog.TenantModels = tenantModels;
+
                 var dialogResult = dialog.ShowDialog();
                 if (!dialogResult.Value)
                 {
                     Close();
                     return;
                 }
-                Tenant = dialog.SelectedTenant;
+                CurrentTenantModel = dialog.SelectedTenantModel;
             }
 
-            var roles = await Api.GetRolesAsync(Tenant, Api.Username, cancellationTokenSource.Token);
+            // EventHandler
+            var roles = await modelMgr.GetRolesAsync(CurrentTenantModel.Context, modelMgr.GetUsername());
             if (roles.Contains("Administrator")) menuitemUsers.IsEnabled = true;
+
+            modelMgr.NotificationChangeProduct += NotificationChangeProduct;
+            modelMgr.NotificationChangeDeviceGroup += NotificationChangeDeviceGroup;
 
             await RefreshAllGrids();
         }
 
         private async Task RefreshAllGrids()
         {
-            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-
             Cursor = Cursors.Wait;
             try
             {
-                this.Title = $"Azure Sphere Explorer - {Tenant.Name}";
+                if (this.CurrentTenantModel != null)
+                {
+                    ModelManager modelMgr = ModelManager.GetInstance();
+                    this.Title = $"Azure Sphere Explorer - {CurrentTenantModel.Tenant}";
+                    List<ProductModel> productModel = await modelMgr.GetProductModels(CurrentTenantModel, true);
+                    List<DeviceGroupModel> deviceGroupModel = await modelMgr.GetDeviceGroupModels(CurrentTenantModel, true);
+                    List<DeviceModel> deviceModels = await modelMgr.GetDeviceModels(CurrentTenantModel, true);
 
-                var products = await Api.GetProductsAsync(Tenant, cancellationTokenSource.Token);
-                var deviceGroups = await Api.GetDeviceGroupsAsync(Tenant, cancellationTokenSource.Token);
-                var devices = await Api.GetDevicesAsync(Tenant, cancellationTokenSource.Token);
-
-                this.gridProducts.ItemsSource = from v in products
-                                                select new ProductModel
-                                                {
-                                                    Context = v,
-                                                    Product = v.Name,
-                                                    Description = v.Description
-                                                };
-
-                this.gridDeviceGroups.ItemsSource = from v in deviceGroups
-                                                    join p in products on v.ProductId equals p.Id
-                                                    select new DeviceGroupModel
-                                                    {
-                                                        Context = v,
-                                                        Product = p.Name,
-                                                        DeviceGroup = v.Name,
-                                                        Description = v.Description,
-                                                        OsFeedType = v.OsFeedTypeStr,
-                                                        UpdatePolicy = v.UpdatePolicyStr,
-                                                        CurrentDeploymentDate = v.CurrentDeployment?.DeploymentDateUtc.ToLocalTime()
-                                                    };
-
-                this.gridDevices.ItemsSource = from v in devices
-                                               join dg in deviceGroups on v.DeviceGroupId equals dg.Id into gj
-                                               from dg_ in gj.DefaultIfEmpty()
-                                               join p in products on dg_?.ProductId equals p.Id into gj2
-                                               from p_ in gj2.DefaultIfEmpty()
-                                               select new DeviceModel
-                                               {
-                                                   Context = v,
-                                                   Product = p_?.Name,
-                                                   DeviceGroup = dg_?.Name,
-                                                   ChipSku = v.ChipSkuStr,
-                                                   Id = v.Id
-                                               };
+                    this.gridProducts.ItemsSource = productModel;
+                    this.gridDeviceGroups.ItemsSource = deviceGroupModel;
+                    this.gridDevices.ItemsSource = deviceModels;
+                }
             }
             finally
             {
@@ -152,15 +105,35 @@ namespace AzureSphereExplorer
         private async void menuitemProductDelete_Click(object sender, RoutedEventArgs e)
         {
             var model = gridProducts.SelectedItem as ProductModel;
-            var product = model.Context;
 
-            var mboxResult = MessageBox.Show(this, $"Do you want to delete the product \"{product.Name}\"?", "Delete Product", MessageBoxButton.OKCancel, MessageBoxImage.Question);
+            if(model == null)
+            {
+                return;
+            }
+
+            var mboxResult = MessageBox.Show(this, $"Do you want to delete the product \"{model.Product}\"?", "Delete Product", MessageBoxButton.OKCancel, MessageBoxImage.Question);
             if (mboxResult != MessageBoxResult.OK) return;
+            Cursor = Cursors.Wait;
+            try
+            {
+                ModelManager modelManager = ModelManager.GetInstance();
+                if(await modelManager.DeleteProduct(this.CurrentTenantModel, model))
+                {
+                    MessageBox.Show("Product delete is success",
+                        "OK", MessageBoxButton.OK);
+                }
+                else
+                {
+                    MessageBox.Show("Product delete is failure",
+                        "Error", MessageBoxButton.OK);
+                }
 
-            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-            await Api.DeleteProductAsync(Tenant, product, cancellationTokenSource.Token);
-
-            await RefreshAllGrids();
+            }
+            finally
+            {
+                Cursor = null;
+            }
+            Cursor = null;
         }
 
         private void menuitemProductCopyId_Click(object sender, RoutedEventArgs e)
@@ -186,14 +159,18 @@ namespace AzureSphereExplorer
         private async void menuitemDeviceGroupDeployments_Click(object sender, RoutedEventArgs e)
         {
             var model = gridDeviceGroups.SelectedItem as DeviceGroupModel;
-            var deviceGroup = model.Context;
+            List<DeploymentModel> deploymentModels = new List<DeploymentModel>();
 
-            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-            List<AzureSphereDeployment> deployments;
+            if (model == null)
+            {
+                return;
+            }
+
             Cursor = Cursors.Wait;
             try
             {
-                deployments = await Api.GetDeploymentsAsync(Tenant, deviceGroup, cancellationTokenSource.Token);
+                ModelManager modelManager = ModelManager.GetInstance();
+                deploymentModels = await modelManager.GetDeploymentModels(CurrentTenantModel, model);
             }
             finally
             {
@@ -203,7 +180,11 @@ namespace AzureSphereExplorer
             var dialog = new DeploymentsWindow();
             dialog.Owner = this;
             dialog.Title += $" - {model.Product},{model.DeviceGroup}";
-            dialog.Deployments = deployments;
+            dialog.CurrentTenantModel = this.CurrentTenantModel;
+            dialog.DeploymentModels = deploymentModels;
+            dialog.SelectDeviceGroupModel = model;
+
+
             var dialogResult = dialog.ShowDialog();
             dialog = null;
         }
@@ -211,15 +192,36 @@ namespace AzureSphereExplorer
         private async void menuitemDeviceGroupDelete_Click(object sender, RoutedEventArgs e)
         {
             var model = gridDeviceGroups.SelectedItem as DeviceGroupModel;
-            var deviceGroup = model.Context;
 
-            var mboxResult = MessageBox.Show(this, $"Do you want to delete the device group \"{deviceGroup.Name}\"?", "Delete Device Group", MessageBoxButton.OKCancel, MessageBoxImage.Question);
+            if (model == null)
+            {
+                return;
+            }
+
+            var mboxResult = MessageBox.Show(this, $"Do you want to delete the device group \"{model.DeviceGroup}\"?", "Delete Device Group", MessageBoxButton.OKCancel, MessageBoxImage.Question);
             if (mboxResult != MessageBoxResult.OK) return;
+            Cursor = Cursors.Wait;
 
-            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-            await Api.DeleteDeviceGroupAsync(Tenant, deviceGroup, cancellationTokenSource.Token);
+            try
+            {
+                ModelManager modelManager = ModelManager.GetInstance();
+                if (await modelManager.DeleteDeviceGroup(this.CurrentTenantModel, model))
+                {
+                    MessageBox.Show("DeviceGroup delete is success",
+                        "OK", MessageBoxButton.OK);
+                }
+                else
+                {
+                    MessageBox.Show("DeviceGroup delete is failure",
+                        "Error", MessageBoxButton.OK);
+                }
 
-            await RefreshAllGrids();
+            }
+            finally
+            {
+                Cursor = null;
+            }
+            Cursor = null;
         }
 
         private void menuitemDeviceGroupCopyId_Click(object sender, RoutedEventArgs e)
@@ -267,12 +269,12 @@ namespace AzureSphereExplorer
 
         private async void menuitemUsers_Click(object sender, RoutedEventArgs e)
         {
-            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-            List<AzureSphereUser> users;
+            List<UserModel> users;
             Cursor = Cursors.Wait;
             try
             {
-                users = await Api.GetUsersAsync(Tenant, cancellationTokenSource.Token);
+                ModelManager modelManager = ModelManager.GetInstance();
+                users = await modelManager.GetUsersModels(this.CurrentTenantModel);
             }
             finally
             {
@@ -281,19 +283,21 @@ namespace AzureSphereExplorer
 
             var dialog = new UsersWindow();
             dialog.Owner = this;
-            dialog.Users = users;
+            dialog.UsersModels = users;
             var dialogResult = dialog.ShowDialog();
             dialog = null;
         }
 
         private async void menuitemErrorReports_Click(object sender, RoutedEventArgs e)
         {
-            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-            List<AzureSphereDeviceInsight> deviceInsights;
+            List<DeviceInsightModel> deviceInsightModels = new List<DeviceInsightModel>();
+
             Cursor = Cursors.Wait;
             try
             {
-                deviceInsights = await Api.GetDeviceInsightsAsync(Tenant, cancellationTokenSource.Token);
+
+                ModelManager modelManager = ModelManager.GetInstance();
+                deviceInsightModels = await modelManager.GetDeviceInsightModels(this.CurrentTenantModel);
             }
             finally
             {
@@ -302,7 +306,8 @@ namespace AzureSphereExplorer
 
             var dialog = new ErrorReportsWindow();
             dialog.Owner = this;
-            dialog.DeviceInsights = deviceInsights;
+            dialog.DeviceInsightModels = deviceInsightModels;
+
             var dialogResult = dialog.ShowDialog();
             dialog = null;
         }
@@ -311,8 +316,31 @@ namespace AzureSphereExplorer
         {
             var dialog = new AboutWindow();
             dialog.Owner = this;
+
             var dialogResult = dialog.ShowDialog();
             dialog = null;
+        }
+
+        private async void NotificationChangeProduct(object sender, EventArgs e)
+        {
+            ModelManager modelMgr = ModelManager.GetInstance();
+
+            Console.Write("called NotificationCreateProduct()");
+            List<ProductModel> productModel = await modelMgr.GetProductModels(CurrentTenantModel, false);
+
+            this.gridProducts.ItemsSource = productModel;
+            this.gridProducts.Items.Refresh();
+        }
+
+        private async void NotificationChangeDeviceGroup(object sender, EventArgs e)
+        {
+            ModelManager modelMgr = ModelManager.GetInstance();
+
+            Console.Write("called NotificationDeviceGroup()");
+            List<DeviceGroupModel> deviceGroupModel = await modelMgr.GetDeviceGroupModels(CurrentTenantModel, false);
+
+            this.gridDeviceGroups.ItemsSource = deviceGroupModel;
+            this.gridDeviceGroups.Items.Refresh();
         }
     }
 }

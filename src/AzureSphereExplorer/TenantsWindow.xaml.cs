@@ -20,8 +20,8 @@ namespace AzureSphereExplorer
     /// </summary>
     public partial class TenantsWindow : Window
     {
-        public List<AzureSphereTenant> Tenants { get; set; }
-        public AzureSphereTenant SelectedTenant { get; set; }
+        internal List<TenantModel> TenantModels { get; set; }
+        internal TenantModel SelectedTenantModel { get; set; }
 
         public TenantsWindow()
         {
@@ -30,12 +30,7 @@ namespace AzureSphereExplorer
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            this.gridTenants.ItemsSource = from v in Tenants
-                                           select new TenantModel
-                                           {
-                                               Context = v,
-                                               Tenant = v.Name
-                                           };
+            this.gridTenants.ItemsSource = this.TenantModels;
         }
 
         private void OK_Click(object sender, RoutedEventArgs e)
@@ -46,7 +41,7 @@ namespace AzureSphereExplorer
                 return;
             }
 
-            this.SelectedTenant = ((TenantModel)this.gridTenants.SelectedItem).Context;
+            this.SelectedTenantModel = (TenantModel)this.gridTenants.SelectedItem;
 
             this.DialogResult = true;
         }
@@ -60,7 +55,7 @@ namespace AzureSphereExplorer
             if (cell == null) cell = element.TemplatedParent as DataGridCell;
             if (cell == null) return;
 
-            this.SelectedTenant = ((TenantModel)cell.DataContext).Context;
+            this.SelectedTenantModel = (TenantModel)cell.DataContext;
 
             this.DialogResult = true;
         }

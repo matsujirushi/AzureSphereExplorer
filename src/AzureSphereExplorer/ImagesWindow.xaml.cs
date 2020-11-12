@@ -20,7 +20,7 @@ namespace AzureSphereExplorer
     /// </summary>
     public partial class ImagesWindow : Window
     {
-        public List<AzureSphereImage> Images { get; set; }
+        internal List<ImageModel> imageModels;
 
         public ImagesWindow()
         {
@@ -29,14 +29,7 @@ namespace AzureSphereExplorer
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            this.gridImages.ItemsSource = from v in Images
-                                               select new ImageModel
-                                               {
-                                                   Context = v,
-                                                   Image = v.Name,
-                                                   Description = v.Description,
-                                                   Type = v.TypeStr
-                                               };
+            this.gridImages.ItemsSource = imageModels;
         }
 
         private void Close_Click(object sender, RoutedEventArgs e)

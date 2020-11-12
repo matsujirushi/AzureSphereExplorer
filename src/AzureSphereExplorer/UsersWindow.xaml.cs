@@ -21,7 +21,7 @@ namespace AzureSphereExplorer
     /// </summary>
     public partial class UsersWindow : Window
     {
-        public List<AzureSphereUser> Users { get; set; }
+        internal List<UserModel> UsersModels { get; set; }
 
         public UsersWindow()
         {
@@ -30,11 +30,11 @@ namespace AzureSphereExplorer
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            this.gridUsers.ItemsSource = from v in Users
+            this.gridUsers.ItemsSource = from v in UsersModels
                                                select new UserModel
                                                {
-                                                   Context = v,
-                                                   User = v.DisplayName,
+                                                   Context = v.Context,
+                                                   User = v.User,
                                                    Mail = v.Mail,
                                                    Roles = string.Join(",", v.Roles)
                                                };
