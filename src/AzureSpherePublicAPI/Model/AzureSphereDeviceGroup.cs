@@ -41,11 +41,13 @@ namespace AzureSpherePublicAPI
                 switch (UpdatePolicy)
                 {
                     case 0:
-                        return "UpdateAll";
+                        return "No3rdParty";
                     case 1:
-                        return "No3rdPartyAppUpdates";
+                        return "AppUpdates";
                     case 2:
                         return "NoUpdates";
+                    case 3:
+                        return "UpdateAll";
                     default:
                         return "?";
                 }
