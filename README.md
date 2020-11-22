@@ -33,3 +33,11 @@ If you are interested, click the Star button. Motivation to develop! :-)
 ## Licence
 
 [MIT](LICENSE.txt)
+
+## Contributors
+
+The following people have contributed to this project. Thank you.
+
+* [takasehideki](https://github.com/takasehideki)
+* [Kouji Matsui](https://github.com/kekyo)
+* [Atmark Techno, Inc.](https://www.atmark-techno.com/)

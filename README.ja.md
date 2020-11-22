@@ -30,6 +30,14 @@ Azure Sphereのデバイスやプロダクト、デバイスグループなど�
 
 [MIT](LICENSE.txt)
 
+## コントリビューター
+
+下記の方々に貢献いただきました。どうもありがとうございます。
+
+* [takasehideki](https://github.com/takasehideki)
+* [Kouji Matsui](https://github.com/kekyo)
+* [株式会社アットマークテクノ](https://www.atmark-techno.com/)
+
 #
 © 2020 matsujirushi  All rights reserved.  
 本コンテンツの著作権、および本コンテンツ中に出てくる商標権、団体名、ロゴ、製品、サービスなどはそれぞれ、各権利保有者に帰属します。
