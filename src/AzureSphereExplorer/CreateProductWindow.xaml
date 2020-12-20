@@ -5,30 +5,36 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AzureSphereExplorer"
         mc:Ignorable="d"
-        Title="CreateProductWindow" Height="200" Width="400" Loaded="Window_Loaded" WindowStartupLocation="CenterOwner">
+        Title="CreateProductWindow" Height="200" Width="600" Loaded="Window_Loaded" WindowStartupLocation="CenterOwner">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition Width="120"/>
         </Grid.ColumnDefinitions>
 
-        <StackPanel>
-            <TextBlock FontSize="15" Height="70">
-            <Run Text="NewProductName:"/><LineBreak/>
-            <TextBox Width="200" x:Name="ProductNameBox">NewProductName</TextBox><LineBreak/>
-            <Run Text="CreateDefaultGroups:"/><LineBreak/>
-            </TextBlock>
-            <ToggleButton Content="Yes" IsChecked="True"
-              FontSize="20"
+        <Grid Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Row="0" Grid.Column="0" Margin="5" TextAlignment="Right" Text="NewProductName:"/>
+            <TextBox Grid.Row="0" Grid.Column="1" Margin="5" Width="200" x:Name="ProductNameBox">NewProductName</TextBox>
+
+            <TextBlock Grid.Row="1" Grid.Column="0" Margin="5" TextAlignment="Right" Text="CreateDefaultGroups:"/>
+            <ToggleButton Grid.Row="1" Grid.Column="1" Margin="5" Content="Yes" IsChecked="True"
               x:Name="DefaultGroupToggleBotton"
-              Click="DefaultGroupToggleBotton_Click" Height="20" HorizontalAlignment="Left" Width="140"/>
+              Click="DefaultGroupToggleBotton_Click" HorizontalAlignment="Left"/>
 
-            <TextBlock FontSize="15" Margin="0,0,0,10">
-            <Run Text="Description:"/><LineBreak/>
-            <TextBox Width="200" x:Name="DescriptionBox"></TextBox><LineBreak/>
-            </TextBlock>
-        </StackPanel>
-
+            <TextBlock Grid.Row="2" Grid.Column="0" Margin="5" TextAlignment="Right" Text="Description:"/>
+            <TextBox Grid.Row="2" Grid.Column="1" Margin="5" Width="200" x:Name="DescriptionBox"/>
+        </Grid>
+        
         <StackPanel Grid.Column="1" Orientation="Vertical">
             <Button Width="100" Height="30" Margin="5" Content="Create" Name="CreateButton" Click="Create_Click" IsDefault="True"/>
             <Button Width="100" Height="30" Margin="5" Content="Close" Name="CloseButton" Click="Close_Click" IsDefault="True"/>

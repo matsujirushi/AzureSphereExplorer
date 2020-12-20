@@ -12,39 +12,46 @@
             <ColumnDefinition Width="120"/>
         </Grid.ColumnDefinitions>
 
-        <TextBlock FontSize="15" Margin="0,0,0,10">
-            <Run Text="TargetDeviceGroup:"/><LineBreak/>
-        </TextBlock>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0" Margin="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
 
-        <StackPanel Orientation="Horizontal">
-            <ComboBox x:Name="DeviceGroupBox"
-              Height="30"
-              Width="200"
-              Margin="140,0,0,0"
-              FontSize="15"
-              VerticalAlignment="Top"
-              SelectedIndex="0"/>
-        </StackPanel>
+                <TextBlock Grid.Row="0" Grid.Column="0" Margin="5" TextAlignment="Right" Text="TargetDeviceGroup:"/>
+                <ComboBox Grid.Row="0" Grid.Column="1" x:Name="DeviceGroupBox"
+                    Width="200"
+                    SelectedIndex="0"/>
+            </Grid>
 
-        <DataGrid
+            <DataGrid Grid.Row="1" 
             x:Name="gridDeviceGroups"
             IsReadOnly="True"
-            AutoGenerateColumns="False" Margin="0,50,0,0">
-            <DataGrid.Columns>
-                <DataGridTemplateColumn IsReadOnly="True" Header="Check">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <CheckBox IsChecked="{Binding IsChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            AutoGenerateColumns="False">
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn IsReadOnly="True" Header="Check">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox IsChecked="{Binding IsChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTextColumn Header="Product" Binding="{Binding Product}"/>
-                <DataGridTextColumn Header="Device Group" Binding="{Binding DeviceGroup}"/>
-                <DataGridTextColumn Header="Device Id" Binding="{Binding Id}"/>
-            </DataGrid.Columns>
-        </DataGrid>
-
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="Product" Binding="{Binding Product}"/>
+                    <DataGridTextColumn Header="Device Group" Binding="{Binding DeviceGroup}"/>
+                    <DataGridTextColumn Header="Device Id" Binding="{Binding Id}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+        
         <StackPanel Grid.Column="1" Orientation="Vertical">
             <Button Width="100" Height="50" Margin="5" Content="DeviceIDs&#10;fromCSV" Name="LoadButton" Click="LoadCSV_Click" IsDefault="True"/>
             <Button Width="100" Height="30" Margin="5" Content="Change" Name="ChangeButton" Click="Change_Click" IsDefault="True"/>

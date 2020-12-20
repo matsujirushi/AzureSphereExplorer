@@ -5,68 +5,53 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AzureSphereExplorer"
         mc:Ignorable="d"
-        Title="CreateDeviceGroupWindow" Height="300" Width="400" Loaded="Window_Loaded" WindowStartupLocation="CenterOwner">
+        Title="CreateDeviceGroupWindow" Height="300" Width="600" Loaded="Window_Loaded" WindowStartupLocation="CenterOwner">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition Width="120"/>
         </Grid.ColumnDefinitions>
 
-        <TextBlock FontSize="15">
-            <Run Text="NewDeviceGroupName:"/><LineBreak/>
-            <TextBox Width="200" x:Name="DeviceGroupNameBox">NewDeviceGroupName</TextBox><LineBreak/>
-        </TextBlock>
-        <TextBlock FontSize="15" Margin="0,50,0,0">
-            <Run Text="SelectProduct:"/><LineBreak/>
-        </TextBlock>
+        <Grid Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
 
-        <StackPanel Orientation="Horizontal">
-            <ComboBox x:Name="ProductBox"
-              Height="30"
+            <TextBlock Grid.Row="0" Grid.Column="0" Margin="5" TextAlignment="Right" Text="NewDeviceGroupName:"/>
+            <TextBox Grid.Row="0" Grid.Column="1" Margin="5" Width="200" x:Name="DeviceGroupNameBox">NewDeviceGroupName</TextBox>
+
+            <TextBlock Grid.Row="1" Grid.Column="0" Margin="5" TextAlignment="Right" Text="SelectProduct:"/>
+            <ComboBox Grid.Row="1" Grid.Column="1" x:Name="ProductBox"
               Width="200"
-              Margin="0,70,0,0"
-              FontSize="15"
-              VerticalAlignment="Top"
               SelectedIndex="0"/>
-        </StackPanel>
 
-        <TextBlock FontSize="15" Margin="0,100,0,0">
-            <Run Text="Description:"/><LineBreak/>
-            <InlineUIContainer>
-    <TextBox Width="200" x:Name="DescriptionBox"/>
-</InlineUIContainer><LineBreak/>
-            <Run Text="OsFeedType:"/><LineBreak/>
-        </TextBlock>
+            <TextBlock Grid.Row="2" Grid.Column="0" Margin="5" TextAlignment="Right" Text="Description:"/>
+            <TextBox Grid.Row="2" Grid.Column="1" Margin="5" Width="200" x:Name="DescriptionBox"/>
 
-        <StackPanel Orientation="Horizontal">
-            <ComboBox x:Name="OsFeedTypeBox"
-              Height="30"
+            <TextBlock Grid.Row="3" Grid.Column="0" Margin="5" TextAlignment="Right" Text="OsFeedType:"/>
+            <ComboBox Grid.Row="3" Grid.Column="1" x:Name="OsFeedTypeBox"
               Width="200"
-              Margin="0,170,0,0"
-              FontSize="15"
-              VerticalAlignment="Top"
               SelectedIndex="0">
                 <ComboBoxItem>Retail</ComboBoxItem>
                 <ComboBoxItem>RetailEval</ComboBoxItem>
             </ComboBox>
-        </StackPanel>
 
-        <TextBlock FontSize="15" Margin="0,200,0,0">
-            <Run Text="UpdatePolicy:"/><LineBreak/>
-        </TextBlock>
-
-        <StackPanel Orientation="Horizontal">
-            <ComboBox x:Name="UpdatePolicyBox"
-              Height="30"
+            <TextBlock Grid.Row="4" Grid.Column="0" Margin="5" TextAlignment="Right" Text="UpdatePolicy:"/>
+            <ComboBox Grid.Row="4" Grid.Column="1" x:Name="UpdatePolicyBox"
               Width="200"
-              Margin="0,230,0,0"
-              FontSize="15"
-              VerticalAlignment="Top"
               SelectedIndex="0">
                 <ComboBoxItem>UpdateAll</ComboBoxItem>
                 <ComboBoxItem>No3rdPartyAppUpdates</ComboBoxItem>
             </ComboBox>
-        </StackPanel>
+        </Grid>
 
         <StackPanel Grid.Column="1" Orientation="Vertical">
             <Button Width="100" Height="30" Margin="5" Content="Create" Name="CreateButton" Click="Create_Click" IsDefault="True"/>
